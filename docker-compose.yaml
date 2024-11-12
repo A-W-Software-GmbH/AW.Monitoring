@@ -1,0 +1,80 @@
+services:
+  grafana:
+    image: grafana/grafana:11.2.1
+    ports:
+      - "23000:3000"
+    depends_on:
+      - prometheus
+      - loki
+      - tempo
+    volumes:
+      - ./grafana/provisioning:/etc/grafana/provisioning
+    user: root
+    networks:
+      - monitoring
+
+  prometheus:
+    image: prom/prometheus:latest
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus/prometheus.yaml:/etc/prometheus/prometheus.yml
+    networks:
+      - monitoring
+
+  loki:
+    image: grafana/loki:3.2.0
+    ports:
+      - "3100:3100"
+    volumes:
+      - ./loki/loki.yaml:/etc/loki/local-config.yaml
+      - loki-storage:/loki/
+    user: root
+    command: -config.file=/etc/loki/local-config.yaml -print-config-stderr
+    networks:
+      - monitoring
+
+  tempo:
+    image: grafana/tempo:2.6.0
+    ports:
+      - "3200:3200"
+    volumes:
+      - ./tempo/tempo.yaml:/etc/tempo/tempo.yaml
+      - tempo-storage:/tmp/tempo/traces
+    command: -config.file=/etc/tempo/tempo.yaml
+    networks:
+      - monitoring
+
+  otel-collector:
+    image: otel/opentelemetry-collector:latest
+    command: ["--config=/etc/otel-collector-config.yaml"]
+    volumes:
+      - ./otel-collector/otel-colector.config.yaml:/etc/otel-collector-config.yaml
+    ports:
+      - "4317:4317" # OTLP gRPC receiver
+      - "4318:4318" # OTLP HTTP receiver
+    networks:
+      - monitoring
+
+  k6-tracing:
+    image: ghcr.io/grafana/xk6-client-tracing:v0.0.5
+    environment:
+      - ENDPOINT=otel-collector:4317
+    restart: always
+    depends_on:
+      - otel-collector
+    networks:
+      - monitoring
+
+volumes:
+  loki-storage:
+    external: false
+    labels:
+      - aw-monitoring
+  tempo-storage:
+    external: false
+    labels:
+      - aw-monitoring
+networks:
+  monitoring:
+    driver: bridge

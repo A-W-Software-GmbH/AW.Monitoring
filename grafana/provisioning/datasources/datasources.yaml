@@ -1,0 +1,39 @@
+# Configuration file version
+apiVersion: 1
+datasources:
+  - name: Prometheus
+    type: prometheus
+    access: proxy
+    url: http://prometheus:9090
+    isDefault: true
+    uid: aw_prometheus
+
+  - name: Loki
+    type: loki
+    access: proxy
+    url: http://loki:3100
+    uid: aw_loki
+    editable: true
+    jsonData:
+      derivedFields:
+        - name: TraceID
+          label: trace_id
+          datasourceUid: aw_tempo
+          internalLink: true
+          query: $${__value.labels.trace_id}
+
+  - name: Tempo
+    type: tempo
+    access: proxy
+    editable: true
+    uid: aw_tempo
+    url: http://tempo:3200
+    jsonData:
+      tracesToLogsV2:
+        datasourceUid: aw_loki
+        filterByTraceID: false
+        filterBySpanID: false
+        spanStartTimeShift: 0
+        spanEndTimeShift: 0
+        customQuery: true
+        query: "{service_name=~\".+\"} | trace_id=`${__span.traceId}`"
