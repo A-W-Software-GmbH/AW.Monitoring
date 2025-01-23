@@ -36,4 +36,5 @@ datasources:
         spanStartTimeShift: 0
         spanEndTimeShift: 0
         customQuery: true
-        query: "{service_name=~\".+\"} | trace_id=`${__span.traceId}`"
+        query: |
+          {service_name=~".+"} | trace_id=`$${__span.traceId}`

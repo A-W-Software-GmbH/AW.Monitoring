@@ -13,7 +13,7 @@ storage:
   trace:
     backend: local
     local:
-      path: /tmp/tempo/traces
+      path: C:/tempo/traces
 
 ingester:
   lifecycler:

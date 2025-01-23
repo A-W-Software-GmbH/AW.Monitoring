@@ -1,3 +1,12 @@
+extensions:
+  health_check:
+    endpoint: 0.0.0.0:13133
+    path: "/health/status"
+    check_collector_pipeline:
+      enabled: true
+      interval: "5m"
+      exporter_failure_threshold: 5
+
 receivers:
   otlp:
     protocols:
@@ -24,16 +33,21 @@ exporters:
     verbosity: detailed
 
 service:
+  extensions: ["health_check"]
+  telemetry:
+    metrics:
+      level: detailed
+      address: 0.0.0.0:8888
   pipelines:
     metrics:
       receivers: [otlp]
       processors: [batch]
-      exporters: [debug]
+      exporters: [prometheus]
     logs:
       receivers: [otlp]
       processors: [batch]
-      exporters: [debug]
+      exporters: [otlphttp]
     traces:
       receivers: [otlp]
       processors: [batch]
-      exporters: [debug]
+      exporters: [otlp]
