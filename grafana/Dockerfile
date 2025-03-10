@@ -34,4 +34,4 @@ EXPOSE 3000
 HEALTHCHECK CMD curl -k -f http://localhost:3000/api/health || exit 1;
 # Set entrypoint
 ENTRYPOINT ["C:\\grafana\\bin\\grafana-server.exe"]
-CMD ["--homepath=C:\\grafana"]
+CMD ["--homepath=C:\\grafana" , "--config=C:\\grafana\\conf\\custom.ini"]

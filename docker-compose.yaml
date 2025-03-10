@@ -1,9 +1,11 @@
 services:
   grafana:
-    image: ${DOCKER_REGISTRY-}grafana
+    image: ${DOCKER_REGISTRY-}grafana:${MONITORING_VERSION-latest}
     build:
       context: ./grafana
       dockerfile: ./Dockerfile
+      tags:
+        - ${DOCKER_REGISTRY-}grafana:latest
       args:
         - IMAGE_PATH=${NANOSERVER_IMAGE_PATH}
         - IMAGE_VERSION=${NANOSERVER_IMAGE_VERSION}
@@ -24,6 +26,9 @@ services:
       - loki
       - tempo
     restart: unless-stopped
+    command:
+      - "--homepath=C:\\grafana"
+      - "--config=C:\\grafana\\conf\\custom.ini"
     volumes:
       - ./grafana/provisioning:C:/grafana/provisioning:ro
       - grafana-data:C:/grafana/data:rw
@@ -32,10 +37,12 @@ services:
       - monitoring
 
   prometheus:
-    image: ${DOCKER_REGISTRY-}prometheus
+    image: ${DOCKER_REGISTRY-}prometheus:${MONITORING_VERSION-latest}
     build:
       context: ./prometheus
       dockerfile: ./Dockerfile
+      tags:
+        - ${DOCKER_REGISTRY-}prometheus:latest
       args:
         - IMAGE_PATH=${SERVERCORE_IMAGE_PATH}
         - IMAGE_VERSION=${SERVERCORE_IMAGE_VERSION}
@@ -64,12 +71,14 @@ services:
       - monitoring
 
   loki:
-    image: ${DOCKER_REGISTRY-}loki
+    image: ${DOCKER_REGISTRY-}loki:${MONITORING_VERSION-latest}
     isolation: process
     restart: unless-stopped
     build:
       context: ./loki
       dockerfile: ./Dockerfile
+      tags:
+        - ${DOCKER_REGISTRY-}loki:latest
       args:
         - IMAGE_PATH=${NANOSERVER_IMAGE_PATH}
         - IMAGE_VERSION=${NANOSERVER_IMAGE_VERSION}
@@ -92,11 +101,13 @@ services:
       - monitoring
 
   tempo:
-    image: ${DOCKER_REGISTRY-}tempo
+    image: ${DOCKER_REGISTRY-}tempo:${MONITORING_VERSION-latest}
     restart: unless-stopped
     build:
       context: ./tempo
       dockerfile: ./Dockerfile
+      tags:
+        - ${DOCKER_REGISTRY-}tempo:latest
       args:
         - IMAGE_PATH=${NANOSERVER_IMAGE_PATH}
         - IMAGE_VERSION=${NANOSERVER_IMAGE_VERSION}
@@ -117,11 +128,13 @@ services:
       - monitoring
 
   otel-collector:
-    image: ${DOCKER_REGISTRY-}collector
+    image: ${DOCKER_REGISTRY-}collector:${MONITORING_VERSION-latest}
     restart: unless-stopped
     build:
       context: ./otel-collector
       dockerfile: ./Dockerfile
+      tags:
+        - ${DOCKER_REGISTRY-}collector:latest
       args:
         - IMAGE_PATH=${NANOSERVER_IMAGE_PATH}
         - IMAGE_VERSION=${NANOSERVER_IMAGE_VERSION}
