@@ -6,7 +6,7 @@ ARG DOWNLOADER_IMAGE_VERSION="lts-nanoserver-ltsc2022"
 
 # Use a base Windows image
 FROM $DOWNLOADER_IMAGE_PATH:$DOWNLOADER_IMAGE_VERSION as downloader
-ARG PROMETHEUS_VERSION="3.0.1"
+ARG PROMETHEUS_VERSION="3.2.1"
 SHELL ["pwsh", "-ExecutionPolicy","RemoteSigned", "-Command", "$ErrorActionPreference = 'Stop'; $ProgressPreference = 'SilentlyContinue'; $InformationPreference = 'Continue';"]
 
 # Download and Unzip and set up prometheus

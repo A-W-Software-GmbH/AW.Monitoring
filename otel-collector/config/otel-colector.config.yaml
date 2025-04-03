@@ -17,6 +17,14 @@ receivers:
 
 processors:
   batch:
+  transform:
+    error_mode: ignore # ignore|silent|propagate
+    trace_statements:
+      - context: span
+        statements:
+          - set(attributes["process.pid"], resource.attributes["process.pid"])
+          - set(attributes["host.name"], resource.attributes["host.name"])
+          - set(attributes["deployment.environment.name"], resource.attributes["deployment.environment.name"])
 
 exporters:
   prometheus:
@@ -30,7 +38,22 @@ exporters:
     tls:
       insecure: true
   debug:
-    verbosity: detailed
+    verbosity: detailed # basic|normal|detailed
+
+connectors:
+  spanmetrics:
+    namespace: traces.span.metrics
+    metrics_flush_interval: 15s
+    #metrics_expiration: 5m
+    dimensions:
+      - name: process.pid
+      - name: host.name
+      - name: deployment.environment.name
+    resource_metrics_key_attributes:
+      - service.name
+      - process.pid
+      - host.name
+      - deployment.environment.name
 
 service:
   extensions: ["health_check"]
@@ -40,7 +63,7 @@ service:
       address: 0.0.0.0:8888
   pipelines:
     metrics:
-      receivers: [otlp]
+      receivers: [otlp,spanmetrics]
       processors: [batch]
       exporters: [prometheus]
     logs:
@@ -51,3 +74,7 @@ service:
       receivers: [otlp]
       processors: [batch]
       exporters: [otlp]
+    traces/to_metrics:
+      receivers: [otlp]
+      processors: [batch,transform]
+      exporters: [spanmetrics]

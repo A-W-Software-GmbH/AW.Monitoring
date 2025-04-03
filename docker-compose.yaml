@@ -67,6 +67,9 @@ services:
       # - "--web.enable-otlp-receiver" # use this after migration to 3.0
       - "--log.level=debug"
       # - "--enable-feature=otlp-write-receiver"
+      - "--storage.tsdb.retention.time=30d"
+      - "--storage.tsdb.retention.size=1GB"
+      #- "--web.enable-remote-write-receiver"
     networks:
       - monitoring
 

@@ -6,7 +6,7 @@ ARG DOWNLOADER_IMAGE_VERSION="lts-nanoserver-ltsc2022"
 
 # Use a base Windows image
 FROM $DOWNLOADER_IMAGE_PATH:$DOWNLOADER_IMAGE_VERSION as downloader
-ARG TEMPO_VERSION="2.6.1"
+ARG TEMPO_VERSION="2.7.2"
 SHELL ["pwsh", "-ExecutionPolicy","RemoteSigned", "-Command", "$ErrorActionPreference = 'Stop'; $ProgressPreference = 'SilentlyContinue'; $InformationPreference = 'Continue';"]
 RUN mkdir C:\tempo\download && mkdir C:\tempo\result;
 
