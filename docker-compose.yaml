@@ -11,7 +11,7 @@ services:
         - IMAGE_VERSION=${NANOSERVER_IMAGE_VERSION}
         - DOWNLOADER_IMAGE_PATH=${DOWNLOADER_IMAGE_PATH}
         - DOWNLOADER_IMAGE_VERSION=${DOWNLOADER_IMAGE_VERSION}
-        - GRAFANA_VERSION=11.4.0
+        - GRAFANA_VERSION=12.1.0
     ports:
       - "23000:3000"
     healthcheck:
@@ -48,7 +48,7 @@ services:
         - IMAGE_VERSION=${SERVERCORE_IMAGE_VERSION}
         - DOWNLOADER_IMAGE_PATH=${DOWNLOADER_IMAGE_PATH}
         - DOWNLOADER_IMAGE_VERSION=${DOWNLOADER_IMAGE_VERSION}
-        - PROMETHEUS_VERSION=3.0.1
+        - PROMETHEUS_VERSION=3.4.2
     isolation: process
     restart: unless-stopped
     healthcheck:
@@ -72,6 +72,8 @@ services:
       #- "--web.enable-remote-write-receiver"
     networks:
       - monitoring
+    # ports:
+    #   - "39090:9090" # Prometheus web UI
 
   loki:
     image: ${DOCKER_REGISTRY-}loki:${MONITORING_VERSION-latest}
@@ -87,7 +89,7 @@ services:
         - IMAGE_VERSION=${NANOSERVER_IMAGE_VERSION}
         - DOWNLOADER_IMAGE_PATH=${DOWNLOADER_IMAGE_PATH}
         - DOWNLOADER_IMAGE_VERSION=${DOWNLOADER_IMAGE_VERSION}
-        - LOKI_VERSION=3.3.0
+        - LOKI_VERSION=3.5.1
     volumes:
       - ./loki/config:C:/loki/config:ro
       - loki-storage:C:/d:rw
@@ -116,7 +118,7 @@ services:
         - IMAGE_VERSION=${NANOSERVER_IMAGE_VERSION}
         - DOWNLOADER_IMAGE_PATH=${DOWNLOADER_IMAGE_PATH}
         - DOWNLOADER_IMAGE_VERSION=${DOWNLOADER_IMAGE_VERSION}
-        - TEMPO_VERSION=2.6.1
+        - TEMPO_VERSION=2.8.1
     healthcheck:
       test: ["CMD-SHELL", "curl -k -f http://localhost:3200/ready || exit 1"]
       interval: 1m30s
@@ -143,7 +145,7 @@ services:
         - IMAGE_VERSION=${NANOSERVER_IMAGE_VERSION}
         - DOWNLOADER_IMAGE_PATH=${DOWNLOADER_IMAGE_PATH}
         - DOWNLOADER_IMAGE_VERSION=${DOWNLOADER_IMAGE_VERSION}
-        - COLLECTOR_VERSION=0.116.1
+        - COLLECTOR_VERSION=0.130.1
     command: ["--config=C:\\collector\\config\\otel-colector.config.yaml"]
     healthcheck:
       test:

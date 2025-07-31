@@ -1,12 +1,12 @@
 # escape=`
 ARG IMAGE_PATH="mcr.microsoft.com/windows/nanoserver"
 ARG IMAGE_VERSION="ltsc2022"
-ARG DOWNLOADER_IMAGE_PATH="mcr.microsoft.com/powershell"
-ARG DOWNLOADER_IMAGE_VERSION="lts-nanoserver-ltsc2022"
+ARG DOWNLOADER_IMAGE_PATH="mcr.microsoft.com/dotnet/sdk"
+ARG DOWNLOADER_IMAGE_VERSION="8.0-nanoserver-ltsc2022"
 
 # Use a base Windows image
 FROM $DOWNLOADER_IMAGE_PATH:$DOWNLOADER_IMAGE_VERSION as downloader
-ARG TEMPO_VERSION="2.7.2"
+ARG TEMPO_VERSION="2.8.1"
 SHELL ["pwsh", "-ExecutionPolicy","RemoteSigned", "-Command", "$ErrorActionPreference = 'Stop'; $ProgressPreference = 'SilentlyContinue'; $InformationPreference = 'Continue';"]
 RUN mkdir C:\tempo\download && mkdir C:\tempo\result;
 

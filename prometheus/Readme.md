@@ -1,9 +1,9 @@
 # Prometheus
 
-## Resources:
+## Resources
 
-- Official docs [here](https://prometheus.io/docs/introduction/overview/).
-- Main repository [here](https://github.com/prometheus/prometheus)
+- [Official docs](https://prometheus.io/docs/introduction/overview/).
+- [Main repository](https://github.com/prometheus/prometheus)
 
 The role of this tools is to ingest, store, search and filter all the `metrics` that the applications generate.
 
@@ -20,6 +20,6 @@ If you want to update the configurations:
 
 The [Dockerfile](./Dockerfile) for the Prometheus has the following Build Arguments that can be used for Patching:
 
-1. `IMAGE_VERSION`: This can be used to select a different version of [Server Core](https://mcr.microsoft.com/en-us/artifact/mar/windows/servercore/tags)
-1. `DOWNLOADER_IMAGE_VERSION`: This can be used to select a different image version for [Powershell](https://mcr.microsoft.com/en-us/artifact/mar/powershell/tags)
+1. `IMAGE_VERSION`: This can be used to select a different version of [Server Core](https://mcr.microsoft.com/artifact/mar/windows/servercore/tags)
+1. `DOWNLOADER_IMAGE_VERSION`: This can be used to select a different image version for [dotnet sdk](https://mcr.microsoft.com/artifact/mar/dotnet/sdk)
 1. `PROMETHEUS_VERSION`: This can be used to select a specific version for Prometheus. Please use versions from [GitHub Releases](https://github.com/prometheus/prometheus/releases).

@@ -1,9 +1,9 @@
 # OpenTelemetry Collector
 
-## Resources:
+## Resources
 
-- Official docs [here](https://opentelemetry.io/docs/collector/).
-- Main repository [here](https://github.com/open-telemetry/opentelemetry-collector)
+- [Official docs](https://opentelemetry.io/docs/collector/).
+- [Main repository](https://github.com/open-telemetry/opentelemetry-collector-contrib)
 
 The role of this tools is to act as a proxy for Logs, Metrics and Traces. All applications are sending all telemetry to the collector which will forward them to the appropriate tool.
 
@@ -33,5 +33,5 @@ For more details please check [troubleshooting docs](https://opentelemetry.io/do
 The [Dockerfile](./Dockerfile) for the OpenTelemetry Collector has the following Build Arguments that can be used for Patching:
 
 1. `IMAGE_VERSION`: This can be used to select a different version of [Nano Server](https://hub.docker.com/r/microsoft/windows-nanoserver)
-1. `DOWNLOADER_IMAGE_VERSION`: This can be used to select a different image version for [Powershell](https://mcr.microsoft.com/en-us/artifact/mar/powershell/tags)
+1. `DOWNLOADER_IMAGE_VERSION`: This can be used to select a different image version for [dotnet sdk](https://mcr.microsoft.com/artifact/mar/dotnet/sdk)
 1. `COLLECTOR_VERSION`: This can be used to select a specific version for OpenTelemetry Collector. Please use versions from [GitHub Releases](https://github.com/open-telemetry/opentelemetry-collector-releases/releases).

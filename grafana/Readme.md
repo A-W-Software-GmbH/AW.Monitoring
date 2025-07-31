@@ -1,6 +1,6 @@
 # Grafana
 
-## Resources:
+## Resources
 
 - Official docs [here](https://grafana.com/docs/grafana/latest/).
 - Main repository [here](https://github.com/grafana/grafana)
@@ -37,5 +37,5 @@ Make sure that you restart the service after any changes to the data sources: `d
 The [Dockerfile](./Dockerfile) for the OpenTelemetry Collector has the following Build Arguments that can be used for Patching:
 
 1. `IMAGE_VERSION`: This can be used to select a different version of [Nano Server](https://hub.docker.com/r/microsoft/windows-nanoserver)
-1. `DOWNLOADER_IMAGE_VERSION`: This can be used to select a different image version for [Powershell](https://mcr.microsoft.com/en-us/artifact/mar/powershell/tags)
+1. `DOWNLOADER_IMAGE_VERSION`: This can be used to select a different image version for [Powershell](https://mcr.microsoft.com/en-us/artifact/mar/dotnet/sdk/tags/tags)
 1. `GRAFANA_VERSION`: This can be used to select a specific version for Grafana. Please use versions from [GitHub Releases](https://github.com/grafana/grafana/releases).

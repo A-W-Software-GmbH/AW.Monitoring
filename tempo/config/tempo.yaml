@@ -7,7 +7,9 @@ distributor:
     otlp:
       protocols:
         grpc:
+          endpoint: 0.0.0.0:4317
         http:
+          endpoint: 0.0.0.0:4318
 
 storage:
   trace:
@@ -24,7 +26,9 @@ ingester:
 
 compactor:
   compaction:
+    block_retention: 336h # 14 Days in hours
     compaction_window: 2h
+    max_block_bytes: 2147483648 # 2GB
 
 querier:
   search:

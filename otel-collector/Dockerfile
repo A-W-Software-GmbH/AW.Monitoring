@@ -6,15 +6,15 @@ ARG IMAGE_PATH="mcr.microsoft.com/windows/nanoserver"
 ARG IMAGE_VERSION="ltsc2022"
 
 # Used to configure the base image for the Stage that downloads the binary
-ARG DOWNLOADER_IMAGE_PATH="mcr.microsoft.com/powershell"
+ARG DOWNLOADER_IMAGE_PATH="mcr.microsoft.com/dotnet/sdk"
 # Used to configure the version of the base image used for the Stage that downloads the binary
-ARG DOWNLOADER_IMAGE_VERSION="lts-nanoserver-ltsc2022"
+ARG DOWNLOADER_IMAGE_VERSION="8.0-nanoserver-ltsc2022"
 
 # Use a base Windows image
 FROM $DOWNLOADER_IMAGE_PATH:$DOWNLOADER_IMAGE_VERSION as downloader
 
 # Used to configure the version of the binary that is downloaded from Github
-ARG COLLECTOR_VERSION="0.122.1"
+ARG COLLECTOR_VERSION="0.130.1"
 
 SHELL ["pwsh", "-ExecutionPolicy","RemoteSigned", "-Command", "$ErrorActionPreference = 'Stop'; $ProgressPreference = 'SilentlyContinue'; $InformationPreference = 'Continue';"]
 RUN mkdir C:\collector\download && mkdir C:\collector\result;
