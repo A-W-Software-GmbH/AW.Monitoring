@@ -10,23 +10,23 @@ ARG GRAFANA_VERSION="12.1.0"
 SHELL ["pwsh", "-ExecutionPolicy","RemoteSigned", "-Command", "$ErrorActionPreference = 'Stop'; $ProgressPreference = 'SilentlyContinue'; $InformationPreference = 'Continue';"]
 
 # Download and Unzip and set up Grafana
-RUN mkdir C:\grafana\download && mkdir C:\grafana\result;`
-    Invoke-WebRequest -URI "https://dl.grafana.com/oss/release/grafana-$env:GRAFANA_VERSION.windows-amd64.zip" -Outfile "C:\grafana\download\grafana.zip"; `
-    Expand-Archive -Path "C:\grafana\download\grafana.zip" -DestinationPath "C:\grafana\result" -Force; `
+WORKDIR /grafana/result
+WORKDIR /grafana/download
+ADD ["https://dl.grafana.com/oss/release/grafana-${GRAFANA_VERSION}.windows-amd64.zip", "/grafana/download/grafana.zip"]
+RUN Expand-Archive -Path "C:\grafana\download\grafana.zip" -DestinationPath "C:\grafana\result" -Force; `
     $folderName = Get-ChildItem -Attributes d -Name -Path "C:\grafana\result\grafana-*" | select -first 1; `
     Copy-Item "C:\grafana\result\$folderName" -Destination "C:\grafana\result\extracted" -Recurse; `
     $versionExpression = '*{0}*' -f $env:GRAFANA_VERSION; `
-    Get-Item "C:\grafana\result\extracted\VERSION" | Get-Content -raw | Where-Object { $_ -notlike $versionExpression } | ForEach { Write-Error "invalid version $_"}; `
-    New-Item -Path "C:\grafana\result\extracted" -Name "data" -ItemType "directory" ; `
-    New-Item -Path "C:\grafana\result\extracted" -Name "logs" -ItemType "directory" ; `
-    New-Item -Path "C:\grafana\result\extracted" -Name "plugins" -ItemType "directory" ; 
+    Get-Item "C:\grafana\result\extracted\VERSION" | Get-Content -raw | Where-Object { $_ -notlike $versionExpression } | ForEach { Write-Error "invalid version $_"}
+WORKDIR /grafana/result/extracted/data
+WORKDIR /grafana/result/extracted/logs
+WORKDIR /grafana/result/extracted/plugins
 
 COPY ".\conf.ini" "C:\grafana\result\extracted\conf\custom.ini"
 
 ARG IMAGE_PATH
 ARG IMAGE_VERSION
 FROM $IMAGE_PATH:$IMAGE_VERSION AS final
-
 USER ContainerUser
 COPY --from=downloader "C:\grafana\result\extracted" "C:\grafana"
 # Expose necessary ports

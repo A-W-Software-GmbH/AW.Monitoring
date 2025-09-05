@@ -10,18 +10,17 @@ ARG LOKI_VERSION="3.5.1"
 SHELL ["pwsh", "-ExecutionPolicy","RemoteSigned", "-Command", "$ErrorActionPreference = 'Stop'; $ProgressPreference = 'SilentlyContinue'; $InformationPreference = 'Continue';"]
 
 # Download and Unzip and set up Loki
-RUN mkdir C:\loki\download && mkdir C:\loki\result; `
-    Invoke-WebRequest -URI "https://github.com/grafana/loki/releases/download/v$($env:LOKI_VERSION)/loki-windows-amd64.exe.zip" -Outfile "C:\loki\download\loki.zip"; `
-    Expand-Archive -Path "C:\loki\download\loki.zip" -DestinationPath "C:\loki\result" -Force; `
+WORKDIR /loki/result
+WORKDIR /loki/download
+ADD ["https://github.com/grafana/loki/releases/download/v${LOKI_VERSION}/loki-windows-amd64.exe.zip", "/loki/download/loki.zip"]
+RUN Expand-Archive -Path "C:\loki\download\loki.zip" -DestinationPath "C:\loki\result" -Force; `
     New-Item -Path "C:\loki\result" -Name "extracted" -ItemType "directory" ; `
     Copy-Item "C:\loki\result\loki-windows-amd64.exe" -Destination "C:\loki\result\extracted\loki.exe" -Force; 
-
 COPY ".\config\loki.yaml" "C:\loki\result\extracted\config\loki.yaml"
 
 ARG IMAGE_PATH
 ARG IMAGE_VERSION
 FROM $IMAGE_PATH:$IMAGE_VERSION AS final
-
 USER ContainerUser
 COPY --from=downloader "C:\loki\result\extracted" "C:\loki"
 HEALTHCHECK CMD curl -k -f http://localhost:3100/ready || exit 1;

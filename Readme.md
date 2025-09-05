@@ -57,12 +57,6 @@ You should consider updating the `MONITORING_VERSION` environment variable befor
    docker compose --env-file ./.env build --pull
    ```
 
-1. Windows Server 2019
-
-   ```sh
-   docker compose --env-file ./.env.2019 build --pull
-   ```
-
 1. Windows Server 2025
 
    ```sh
@@ -87,18 +81,6 @@ You should consider updating the `MONITORING_VERSION` environment variable befor
 
    ```sh
    docker compose --env-file ./.env up -d
-   ```
-
-1. How to run the monitoring poc on `Windows Server 2019`
-
-   ```sh
-   docker compose --env-file ./.env.2019 up -d
-   ```
-
-   The alternative is to copy the content of `.env.2019` into `.env` and then run the command:
-
-   ```sh
-   docker compose up -d
    ```
 
 1. How to run the monitoring poc on `Windows Server 2025`

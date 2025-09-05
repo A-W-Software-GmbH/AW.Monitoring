@@ -12,6 +12,11 @@ services:
         - DOWNLOADER_IMAGE_PATH=${DOWNLOADER_IMAGE_PATH}
         - DOWNLOADER_IMAGE_VERSION=${DOWNLOADER_IMAGE_VERSION}
         - GRAFANA_VERSION=12.1.0
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 1g
     ports:
       - "23000:3000"
     healthcheck:
@@ -48,7 +53,12 @@ services:
         - IMAGE_VERSION=${SERVERCORE_IMAGE_VERSION}
         - DOWNLOADER_IMAGE_PATH=${DOWNLOADER_IMAGE_PATH}
         - DOWNLOADER_IMAGE_VERSION=${DOWNLOADER_IMAGE_VERSION}
-        - PROMETHEUS_VERSION=3.4.2
+        - PROMETHEUS_VERSION=3.5.0
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 1g
     isolation: process
     restart: unless-stopped
     healthcheck:
@@ -90,6 +100,11 @@ services:
         - DOWNLOADER_IMAGE_PATH=${DOWNLOADER_IMAGE_PATH}
         - DOWNLOADER_IMAGE_VERSION=${DOWNLOADER_IMAGE_VERSION}
         - LOKI_VERSION=3.5.1
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 1g
     volumes:
       - ./loki/config:C:/loki/config:ro
       - loki-storage:C:/d:rw
@@ -119,6 +134,11 @@ services:
         - DOWNLOADER_IMAGE_PATH=${DOWNLOADER_IMAGE_PATH}
         - DOWNLOADER_IMAGE_VERSION=${DOWNLOADER_IMAGE_VERSION}
         - TEMPO_VERSION=2.8.1
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 1g
     healthcheck:
       test: ["CMD-SHELL", "curl -k -f http://localhost:3200/ready || exit 1"]
       interval: 1m30s
@@ -141,11 +161,16 @@ services:
       tags:
         - ${DOCKER_REGISTRY-}collector:latest
       args:
-        - IMAGE_PATH=${NANOSERVER_IMAGE_PATH}
-        - IMAGE_VERSION=${NANOSERVER_IMAGE_VERSION}
+        - IMAGE_PATH=${SERVERCORE_IMAGE_PATH}
+        - IMAGE_VERSION=${SERVERCORE_IMAGE_VERSION}
         - DOWNLOADER_IMAGE_PATH=${DOWNLOADER_IMAGE_PATH}
         - DOWNLOADER_IMAGE_VERSION=${DOWNLOADER_IMAGE_VERSION}
-        - COLLECTOR_VERSION=0.130.1
+        - COLLECTOR_VERSION=0.134.1
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 1g
     command: ["--config=C:\\collector\\config\\otel-colector.config.yaml"]
     healthcheck:
       test:
