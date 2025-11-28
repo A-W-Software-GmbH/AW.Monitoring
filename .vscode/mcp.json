@@ -1,0 +1,9 @@
+{
+	"servers": {
+		"grafana": {
+			"type": "http",			
+			"url": "http://localhost:38000/mcp"
+		},
+	},
+	"inputs": []
+}

@@ -11,12 +11,12 @@ services:
         - IMAGE_VERSION=${NANOSERVER_IMAGE_VERSION}
         - DOWNLOADER_IMAGE_PATH=${DOWNLOADER_IMAGE_PATH}
         - DOWNLOADER_IMAGE_VERSION=${DOWNLOADER_IMAGE_VERSION}
-        - GRAFANA_VERSION=12.1.0
+        - GRAFANA_VERSION=12.3.0
     deploy:
       resources:
         limits:
           cpus: '0.5'
-          memory: 1g
+          memory: 2g
     ports:
       - "23000:3000"
     healthcheck:
@@ -53,12 +53,12 @@ services:
         - IMAGE_VERSION=${SERVERCORE_IMAGE_VERSION}
         - DOWNLOADER_IMAGE_PATH=${DOWNLOADER_IMAGE_PATH}
         - DOWNLOADER_IMAGE_VERSION=${DOWNLOADER_IMAGE_VERSION}
-        - PROMETHEUS_VERSION=3.5.0
+        - PROMETHEUS_VERSION=3.7.3
     deploy:
       resources:
         limits:
           cpus: '0.5'
-          memory: 1g
+          memory: 2g
     isolation: process
     restart: unless-stopped
     healthcheck:
@@ -82,8 +82,8 @@ services:
       #- "--web.enable-remote-write-receiver"
     networks:
       - monitoring
-    # ports:
-    #   - "39090:9090" # Prometheus web UI
+    #ports:
+    #  - "39090:9090" # Prometheus web UI
 
   loki:
     image: ${DOCKER_REGISTRY-}loki:${MONITORING_VERSION-latest}
@@ -104,7 +104,7 @@ services:
       resources:
         limits:
           cpus: '0.5'
-          memory: 1g
+          memory: 2g
     volumes:
       - ./loki/config:C:/loki/config:ro
       - loki-storage:C:/d:rw
@@ -133,12 +133,12 @@ services:
         - IMAGE_VERSION=${NANOSERVER_IMAGE_VERSION}
         - DOWNLOADER_IMAGE_PATH=${DOWNLOADER_IMAGE_PATH}
         - DOWNLOADER_IMAGE_VERSION=${DOWNLOADER_IMAGE_VERSION}
-        - TEMPO_VERSION=2.8.1
+        - TEMPO_VERSION=2.9.0
     deploy:
       resources:
         limits:
           cpus: '0.5'
-          memory: 1g
+          memory: 2g
     healthcheck:
       test: ["CMD-SHELL", "curl -k -f http://localhost:3200/ready || exit 1"]
       interval: 1m30s
@@ -165,12 +165,12 @@ services:
         - IMAGE_VERSION=${SERVERCORE_IMAGE_VERSION}
         - DOWNLOADER_IMAGE_PATH=${DOWNLOADER_IMAGE_PATH}
         - DOWNLOADER_IMAGE_VERSION=${DOWNLOADER_IMAGE_VERSION}
-        - COLLECTOR_VERSION=0.134.1
+        - COLLECTOR_VERSION=0.140.1
     deploy:
       resources:
         limits:
           cpus: '0.5'
-          memory: 1g
+          memory: 2g
     command: ["--config=C:\\collector\\config\\otel-colector.config.yaml"]
     healthcheck:
       test:
@@ -187,6 +187,42 @@ services:
     ports:
       - "34317:4317" # OTLP gRPC receiver
       - "34318:4318" # OTLP HTTP receiver
+    networks:
+      - monitoring
+
+  mcp-grafana:
+    profiles:
+      - mcp
+    image: ${DOCKER_REGISTRY-}mcp-grafana:${MONITORING_VERSION-latest}
+    restart: unless-stopped
+    build:
+      context: ./mcp-grafana
+      dockerfile: ./Dockerfile
+      tags:
+        - ${DOCKER_REGISTRY-}mcp-grafana:latest
+      args:
+        - IMAGE_PATH=${NANOSERVER_IMAGE_PATH}
+        - IMAGE_VERSION=${NANOSERVER_IMAGE_VERSION}
+        - DOWNLOADER_IMAGE_PATH=${DOWNLOADER_IMAGE_PATH}
+        - DOWNLOADER_IMAGE_VERSION=${DOWNLOADER_IMAGE_VERSION}
+        - MCP_GRAFANA_VERSION=0.7.9
+    depends_on:
+      - grafana
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 2g
+    env_file:
+      - user.env
+    healthcheck:
+      test: ["CMD-SHELL", "curl -k -f http://localhost:8000/healthz || exit 1"]
+      interval: 1m30s
+      timeout: 30s
+      retries: 5
+      start_period: 30s
+    ports:
+      - "38000:8000" # mcp-grafana port
     networks:
       - monitoring
 

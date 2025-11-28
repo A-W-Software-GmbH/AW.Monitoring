@@ -6,7 +6,7 @@ ARG DOWNLOADER_IMAGE_VERSION="8.0-nanoserver-ltsc2022"
 
 # Use a base Windows image
 FROM $DOWNLOADER_IMAGE_PATH:$DOWNLOADER_IMAGE_VERSION as downloader
-ARG TEMPO_VERSION="2.8.1"
+ARG TEMPO_VERSION="2.9.0"
 SHELL ["pwsh", "-ExecutionPolicy","RemoteSigned", "-Command", "$ErrorActionPreference = 'Stop'; $ProgressPreference = 'SilentlyContinue'; $InformationPreference = 'Continue';"]
 
 # Download and extract and set up tempo

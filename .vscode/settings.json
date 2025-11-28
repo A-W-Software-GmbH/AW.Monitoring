@@ -1,0 +1,17 @@
+{
+    "chat.mcp.serverSampling": {
+        "AW.Monitoring/.vscode/mcp.json: grafana": {
+            "allowedModels": [
+                "copilot/gpt-4.1",
+                "copilot/auto",
+                "copilot/claude-sonnet-4",
+                "copilot/gemini-2.5-pro",
+                "copilot/gpt-4o",
+                "copilot/gpt-5",
+                "copilot/gpt-5-mini",
+                "copilot/gpt-5-codex",
+                "copilot/grok-code-fast-1"
+            ]
+        }
+    }
+}

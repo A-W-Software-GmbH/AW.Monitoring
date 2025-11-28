@@ -14,7 +14,7 @@ ARG DOWNLOADER_IMAGE_VERSION="8.0-nanoserver-ltsc2022"
 FROM $DOWNLOADER_IMAGE_PATH:$DOWNLOADER_IMAGE_VERSION as downloader
 
 # Used to configure the version of the binary that is downloaded from Github
-ARG COLLECTOR_VERSION="0.134.1"
+ARG COLLECTOR_VERSION="0.140.1"
 
 SHELL ["pwsh", "-ExecutionPolicy","RemoteSigned", "-Command", "$ErrorActionPreference = 'Stop'; $ProgressPreference = 'SilentlyContinue'; $InformationPreference = 'Continue';"]
 

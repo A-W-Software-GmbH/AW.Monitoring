@@ -30,6 +30,10 @@ See: [Grafana Tempo](./tempo/Readme.md).
 
 See: [Prometheus](./prometheus/Readme.md).
 
+## MCP-Grafana
+
+See: [MCP-Grafana](./mcp-grafana/Readme.md)
+
 ## General Patching Guidelines
 
 Each service is relying on 4 build arguments that allow you to select the base image repository and version.
@@ -44,6 +48,14 @@ They are configured through the `build => args` section of each service from the
 **Please be aware that the values set for build arguments in the `docker-compose.yaml` take precedence over the ones set in the Dockerfiles.**
 
 You should consider updating the `MONITORING_VERSION` environment variable before building the patched images. In this way you will be able to rollback to the previous image without rebuilding it if it was running on this Virtual Machine before.
+
+## How to use MCP-Grafana-Server
+
+If you want to use the MCP-Grafana-Server, you have to do the following steps:
+
+- Create a user or a service account with admin rights to Grafana.
+- Enter the credentials or the token to the `user.env` file.
+- Use `docker compose --profile mcp <command>` instead of `docker compose <command>`.
 
 ## How to download the latest base image
 
