@@ -27,8 +27,10 @@ processors:
           - set(attributes["deployment.environment.name"], resource.attributes["deployment.environment.name"])
 
 exporters:
-  prometheus:
-    endpoint: 0.0.0.0:28888
+  otlphttp/prometheus:
+    endpoint: "http://prometheus:9090/api/v1/otlp"
+    tls:
+      insecure: true
   otlphttp:
     endpoint: http://loki:3100/otlp
     tls:
@@ -70,7 +72,7 @@ service:
     metrics:
       receivers: [otlp,spanmetrics]
       processors: [batch]
-      exporters: [prometheus]
+      exporters: [otlphttp/prometheus]
     logs:
       receivers: [otlp]
       processors: [batch]

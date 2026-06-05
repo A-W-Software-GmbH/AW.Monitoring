@@ -6,7 +6,7 @@ ARG DOWNLOADER_IMAGE_VERSION="8.0-nanoserver-ltsc2022"
 
 # Use a base Windows image
 FROM $DOWNLOADER_IMAGE_PATH:$DOWNLOADER_IMAGE_VERSION as downloader
-ARG GRAFANA_MCP_VERSION="0.7.9"
+ARG GRAFANA_MCP_VERSION="0.15.2"
 SHELL ["pwsh", "-ExecutionPolicy","RemoteSigned", "-Command", "$ErrorActionPreference = 'Stop'; $ProgressPreference = 'SilentlyContinue'; $InformationPreference = 'Continue';"]
 
 # Download and Unzip and set up Grafana

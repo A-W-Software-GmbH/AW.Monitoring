@@ -17,18 +17,14 @@ storage:
     local:
       path: C:/tempo/traces
 
-ingester:
-  lifecycler:
-    ring:
-      kvstore:
-        store: inmemory
-      replication_factor: 1
-
-compactor:
+backend_worker:
   compaction:
     block_retention: 336h # 14 Days in hours
     compaction_window: 2h
     max_block_bytes: 2147483648 # 2GB
+  ring:
+    kvstore:
+      store: inmemory
 
 querier:
   search:

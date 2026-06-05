@@ -1,0 +1,99 @@
+{
+    "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+    "platform": "azure",
+    "extends": ["config:recommended"],
+    "reviewers": ["ohainz@a-w.com", "pglaum@a-w.com"],
+    "automerge": true,
+    "automergeType": "branch",
+    "ignoreTests": true,
+    "baseBranches": ["/^feature\\/update-.*/"],
+    "enabledManagers": ["custom.regex"],
+    "customManagers": [
+        {
+            "customType": "regex",
+            "description": "Track Grafana releases in docker-compose.yaml and Dockerfile",
+            "fileMatch": ["docker-compose\\.yaml$", "grafana/Dockerfile$"],
+            "matchStrings": [
+                "- GRAFANA_VERSION=(?<currentValue>[\\d.]+)",
+                "ARG GRAFANA_VERSION=\"(?<currentValue>[^\"]+)\""
+            ],
+            "depNameTemplate": "grafana/grafana",
+            "datasourceTemplate": "github-releases",
+            "extractVersionTemplate": "^v(?<version>.*)$"
+        },
+        {
+            "customType": "regex",
+            "description": "Track Prometheus releases in docker-compose.yaml and Dockerfile",
+            "fileMatch": ["docker-compose\\.yaml$", "prometheus/Dockerfile$"],
+            "matchStrings": [
+                "- PROMETHEUS_VERSION=(?<currentValue>[\\d.]+)",
+                "ARG PROMETHEUS_VERSION=\"(?<currentValue>[^\"]+)\""
+            ],
+            "depNameTemplate": "prometheus/prometheus",
+            "datasourceTemplate": "github-releases",
+            "extractVersionTemplate": "^v(?<version>.*)$"
+        },
+        {
+            "customType": "regex",
+            "description": "Track Grafana Tempo releases in docker-compose.yaml and Dockerfile",
+            "fileMatch": ["docker-compose\\.yaml$", "tempo/Dockerfile$"],
+            "matchStrings": [
+                "- TEMPO_VERSION=(?<currentValue>[\\d.]+)",
+                "ARG TEMPO_VERSION=\"(?<currentValue>[^\"]+)\""
+            ],
+            "depNameTemplate": "grafana/tempo",
+            "datasourceTemplate": "github-releases",
+            "extractVersionTemplate": "^v(?<version>.*)$"
+        },
+        {
+            "customType": "regex",
+            "description": "Track Grafana Loki releases in docker-compose.yaml and Dockerfile",
+            "fileMatch": ["docker-compose\\.yaml$", "loki/Dockerfile$"],
+            "matchStrings": [
+                "- LOKI_VERSION=(?<currentValue>[\\d.]+)",
+                "ARG LOKI_VERSION=\"(?<currentValue>[^\"]+)\""
+            ],
+            "depNameTemplate": "grafana/loki",
+            "datasourceTemplate": "github-releases",
+            "extractVersionTemplate": "^v(?<version>.*)$"
+        },
+        {
+            "customType": "regex",
+            "description": "Track Grafana MCP releases in docker-compose.yaml and Dockerfile",
+            "fileMatch": ["docker-compose\\.yaml$", "mcp-grafana/Dockerfile$"],
+            "matchStrings": [
+                "- MCP_GRAFANA_VERSION=(?<currentValue>[\\d.]+)",
+                "ARG GRAFANA_MCP_VERSION=\"(?<currentValue>[^\"]+)\""
+            ],
+            "depNameTemplate": "grafana/mcp-grafana",
+            "datasourceTemplate": "github-releases",
+            "extractVersionTemplate": "^v(?<version>.*)$"
+        },
+        {
+            "customType": "regex",
+            "description": "Track OpenTelemetry Collector releases in docker-compose.yaml and Dockerfile",
+            "fileMatch": ["docker-compose\\.yaml$", "otel-collector/Dockerfile$"],
+            "matchStrings": [
+                "- COLLECTOR_VERSION=(?<currentValue>[\\d.]+)",
+                "ARG COLLECTOR_VERSION=\"(?<currentValue>[^\"]+)\""
+            ],
+            "depNameTemplate": "open-telemetry/opentelemetry-collector-releases",
+            "datasourceTemplate": "github-releases",
+            "extractVersionTemplate": "^v(?<version>.*)$"
+        }
+    ],
+    "packageRules": [
+        {
+            "matchDepNames": [
+                "grafana/grafana",
+                "prometheus/prometheus",
+                "grafana/tempo",
+                "grafana/loki",
+                "grafana/mcp-grafana",
+                "open-telemetry/opentelemetry-collector-releases"
+            ],
+            "groupName": "A+W Monitoring Stack",
+            "description": "Group all A+W Monitoring stack version updates into a single PR"
+        }
+    ]
+}

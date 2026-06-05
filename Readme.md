@@ -150,3 +150,16 @@ You should consider updating the `MONITORING_VERSION` environment variable befor
     1. `MONITORING_VERSION`
 
         This variable can be used to version the images for each service. This can be useful if you want to build once all the images and maintain them in a Docker Registry.
+
+## Renovate
+
+```ps1
+$env:LOG_LEVEL="debug"
+$env:RENOVATE_PLATFORM="local"
+$env:RENOVATE_CONFIG_FILE=".ci/renovate.json"
+$env:RENOVATE_DRY_RUN="full"
+$env:RENOVATE_REQUIRE_CONFIG="optional"
+$env:RENOVATE_ONBOARDING="false"
+$env:GITHUB_COM_TOKEN="<your-token>"
+npx renovate --platform=local --dry-run=full
+```

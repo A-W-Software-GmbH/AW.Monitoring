@@ -11,7 +11,7 @@ services:
         - IMAGE_VERSION=${NANOSERVER_IMAGE_VERSION}
         - DOWNLOADER_IMAGE_PATH=${DOWNLOADER_IMAGE_PATH}
         - DOWNLOADER_IMAGE_VERSION=${DOWNLOADER_IMAGE_VERSION}
-        - GRAFANA_VERSION=12.3.0
+        - GRAFANA_VERSION=13.0.1
     deploy:
       resources:
         limits:
@@ -53,12 +53,12 @@ services:
         - IMAGE_VERSION=${SERVERCORE_IMAGE_VERSION}
         - DOWNLOADER_IMAGE_PATH=${DOWNLOADER_IMAGE_PATH}
         - DOWNLOADER_IMAGE_VERSION=${DOWNLOADER_IMAGE_VERSION}
-        - PROMETHEUS_VERSION=3.7.3
+        - PROMETHEUS_VERSION=3.12.0
     deploy:
       resources:
         limits:
-          cpus: '0.5'
-          memory: 2g
+          cpus: '1.0'
+          memory: 4g
     isolation: process
     restart: unless-stopped
     healthcheck:
@@ -71,13 +71,14 @@ services:
     volumes:
       - ./prometheus/config:C:/prometheus/config:ro
       - prometheus-data:C:/d:rw
+    user: ContainerAdministrator
     command:
       - "--storage.tsdb.path=C:\\d"
       - "--config.file=C:\\prometheus\\config\\prometheus.yaml"
-      # - "--web.enable-otlp-receiver" # use this after migration to 3.0
+      - "--web.enable-otlp-receiver"
       - "--log.level=debug"
       # - "--enable-feature=otlp-write-receiver"
-      - "--storage.tsdb.retention.time=30d"
+      - "--storage.tsdb.retention.time=7d"
       - "--storage.tsdb.retention.size=1GB"
       #- "--web.enable-remote-write-receiver"
     networks:
@@ -99,7 +100,7 @@ services:
         - IMAGE_VERSION=${NANOSERVER_IMAGE_VERSION}
         - DOWNLOADER_IMAGE_PATH=${DOWNLOADER_IMAGE_PATH}
         - DOWNLOADER_IMAGE_VERSION=${DOWNLOADER_IMAGE_VERSION}
-        - LOKI_VERSION=3.5.1
+        - LOKI_VERSION=3.7.2
     deploy:
       resources:
         limits:
@@ -133,7 +134,7 @@ services:
         - IMAGE_VERSION=${NANOSERVER_IMAGE_VERSION}
         - DOWNLOADER_IMAGE_PATH=${DOWNLOADER_IMAGE_PATH}
         - DOWNLOADER_IMAGE_VERSION=${DOWNLOADER_IMAGE_VERSION}
-        - TEMPO_VERSION=2.9.0
+        - TEMPO_VERSION=3.0.0
     deploy:
       resources:
         limits:
@@ -165,7 +166,7 @@ services:
         - IMAGE_VERSION=${SERVERCORE_IMAGE_VERSION}
         - DOWNLOADER_IMAGE_PATH=${DOWNLOADER_IMAGE_PATH}
         - DOWNLOADER_IMAGE_VERSION=${DOWNLOADER_IMAGE_VERSION}
-        - COLLECTOR_VERSION=0.140.1
+        - COLLECTOR_VERSION=0.153.0
     deploy:
       resources:
         limits:
@@ -205,7 +206,7 @@ services:
         - IMAGE_VERSION=${NANOSERVER_IMAGE_VERSION}
         - DOWNLOADER_IMAGE_PATH=${DOWNLOADER_IMAGE_PATH}
         - DOWNLOADER_IMAGE_VERSION=${DOWNLOADER_IMAGE_VERSION}
-        - MCP_GRAFANA_VERSION=0.7.9
+        - MCP_GRAFANA_VERSION=0.15.2
     depends_on:
       - grafana
     deploy:

@@ -1,0 +1,37 @@
+parameters:
+    - name: dryRun
+      displayName: "Dry run (no PRs created)"
+      type: boolean
+      default: false
+
+schedules:
+    - cron: "0 3 * * *"
+      displayName: "Every day at 3am (UTC)"
+      branches:
+          include: ["feature/update-*"]
+      always: true
+
+variables:
+    - group: "Pipeline Secrets"
+
+trigger: none
+
+pool:
+    vmImage: ubuntu-latest
+
+steps:
+    - bash: |
+          npx renovate
+      displayName: "Run Renovate"
+      env:
+          RENOVATE_CONFIG_FILE: ".ci/renovate.json"
+          RENOVATE_PLATFORM: azure
+          RENOVATE_ENDPOINT: $(System.CollectionUri)
+          RENOVATE_TOKEN: $(System.AccessToken)
+          RENOVATE_REPOSITORIES: '["$(System.TeamProject)/$(Build.Repository.Name)"]'
+          RENOVATE_REQUIRE_CONFIG: optional
+          RENOVATE_ONBOARDING: "false"
+          ${{ if eq(parameters.dryRun, true) }}:
+              RENOVATE_DRY_RUN: "full"
+          GITHUB_COM_TOKEN: $(github.token)
+          LOG_LEVEL: debug
