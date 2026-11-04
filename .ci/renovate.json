@@ -2,7 +2,6 @@
     "$schema": "https://docs.renovatebot.com/renovate-schema.json",
     "platform": "azure",
     "extends": ["config:recommended"],
-    "reviewers": ["ohainz@a-w.com", "pglaum@a-w.com"],
     "automerge": true,
     "automergeType": "branch",
     "ignoreTests": true,
@@ -80,6 +79,18 @@
             "depNameTemplate": "open-telemetry/opentelemetry-collector-releases",
             "datasourceTemplate": "github-releases",
             "extractVersionTemplate": "^v(?<version>.*)$"
+        },
+        {
+            "customType": "regex",
+            "description": "Track Infinity datasource plugin releases in docker-compose.yaml and Dockerfile",
+            "fileMatch": ["docker-compose\\.yaml$", "grafana/Dockerfile$"],
+            "matchStrings": [
+                "- INFINITY_DATASOURCE_VERSION=(?<currentValue>[\\d.]+)",
+                "ARG INFINITY_DATASOURCE_VERSION=\"(?<currentValue>[^\"]+)\""
+            ],
+            "depNameTemplate": "grafana/grafana-infinity-datasource",
+            "datasourceTemplate": "github-releases",
+            "extractVersionTemplate": "^v(?<version>.*)$"
         }
     ],
     "packageRules": [
@@ -90,7 +101,8 @@
                 "grafana/tempo",
                 "grafana/loki",
                 "grafana/mcp-grafana",
-                "open-telemetry/opentelemetry-collector-releases"
+                "open-telemetry/opentelemetry-collector-releases",
+                "grafana/grafana-infinity-datasource"
             ],
             "groupName": "A+W Monitoring Stack",
             "description": "Group all A+W Monitoring stack version updates into a single PR"

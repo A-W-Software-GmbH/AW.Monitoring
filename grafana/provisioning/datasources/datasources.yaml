@@ -29,12 +29,15 @@ datasources:
     uid: aw_tempo
     url: http://tempo:3200
     jsonData:
+      streamingEnabled:
+        search: false
+        metrics: false
       tracesToLogsV2:
         datasourceUid: aw_loki
         filterByTraceID: false
         filterBySpanID: false
-        spanStartTimeShift: 0
-        spanEndTimeShift: 0
+        spanStartTimeShift: -5m
+        spanEndTimeShift: 5m
         customQuery: true
         query: |
           {service_name=~".+"} | trace_id=`$${__span.traceId}`

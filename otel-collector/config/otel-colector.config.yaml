@@ -27,15 +27,15 @@ processors:
           - set(attributes["deployment.environment.name"], resource.attributes["deployment.environment.name"])
 
 exporters:
-  otlphttp/prometheus:
+  otlp_http/prometheus:
     endpoint: "http://prometheus:9090/api/v1/otlp"
     tls:
       insecure: true
-  otlphttp:
+  otlp_http:
     endpoint: http://loki:3100/otlp
     tls:
       insecure: true
-  otlp:
+  otlp_grpc:
     endpoint: "http://tempo:4317"
     tls:
       insecure: true
@@ -43,7 +43,7 @@ exporters:
     verbosity: detailed # basic|normal|detailed
 
 connectors:
-  spanmetrics:
+  span_metrics:
     namespace: traces.span.metrics
     metrics_flush_interval: 15s
     #metrics_expiration: 5m
@@ -70,18 +70,18 @@ service:
                 port: 8888
   pipelines:
     metrics:
-      receivers: [otlp,spanmetrics]
+      receivers: [otlp,span_metrics]
       processors: [batch]
-      exporters: [otlphttp/prometheus]
+      exporters: [otlp_http/prometheus]
     logs:
       receivers: [otlp]
       processors: [batch]
-      exporters: [otlphttp]
+      exporters: [otlp_http]
     traces:
       receivers: [otlp]
       processors: [batch]
-      exporters: [otlp]
+      exporters: [otlp_grpc]
     traces/to_metrics:
       receivers: [otlp]
       processors: [batch,transform]
-      exporters: [spanmetrics]
+      exporters: [span_metrics]

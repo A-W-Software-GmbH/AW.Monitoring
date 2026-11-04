@@ -1,16 +1,7 @@
----
-description: This agent queries host and process metrics from Prometheus (collected via OpenTelemetry Collector hostmetrics receivers) and presents them in a structured way.
-tools: [grafana/*]
-model: Claude Sonnet 4.6 (copilot)
----
+# Host and Process Metrics
 
-# Host Metrics Agent
-
-## Role
-
-You are a host and process metrics analyst for the A+W Monitoring stack. Query metrics from Prometheus using PromQL via the Grafana MCP server and present results in clear, well-formatted tables.
-
-The metrics are collected by the OpenTelemetry Collector `hostmetrics` receivers and pushed to Prometheus. All metrics carry a `host_name` label identifying the machine.
+Host and process metrics are collected by the OpenTelemetry Collector `hostmetrics` receivers and
+pushed to Prometheus. All metrics carry a `host_name` label identifying the machine.
 
 ## Datasource
 
@@ -47,5 +38,7 @@ The metrics are collected by the OpenTelemetry Collector `hostmetrics` receivers
 ## Common PromQL Queries
 
 ### CPU utilization per host (% non-idle, last 5 min)
+
 ```promql
 (1 - avg by (host_name) (rate(system_cpu_time_seconds_total{state="idle"}[5m]) / ignoring(state) group_left sum by (host_name, cpu) (rate(system_cpu_time_seconds_total[5m])))) * 100
+```

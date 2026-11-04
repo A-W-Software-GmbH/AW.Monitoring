@@ -6,7 +6,7 @@ ARG DOWNLOADER_IMAGE_VERSION="8.0-nanoserver-ltsc2022"
 
 # Use a base Windows image
 FROM $DOWNLOADER_IMAGE_PATH:$DOWNLOADER_IMAGE_VERSION as downloader
-ARG LOKI_VERSION="3.7.2"
+ARG LOKI_VERSION="3.7.9"
 SHELL ["pwsh", "-ExecutionPolicy","RemoteSigned", "-Command", "$ErrorActionPreference = 'Stop'; $ProgressPreference = 'SilentlyContinue'; $InformationPreference = 'Continue';"]
 
 # Download and Unzip and set up Loki
@@ -16,6 +16,9 @@ ADD ["https://github.com/grafana/loki/releases/download/v${LOKI_VERSION}/loki-wi
 RUN Expand-Archive -Path "C:\loki\download\loki.zip" -DestinationPath "C:\loki\result" -Force; `
     New-Item -Path "C:\loki\result" -Name "extracted" -ItemType "directory" ; `
     Copy-Item "C:\loki\result\loki-windows-amd64.exe" -Destination "C:\loki\result\extracted\loki.exe" -Force; 
+# The release archive contains only the executable, so the license texts come from the release tag.
+ADD ["https://raw.githubusercontent.com/grafana/loki/v${LOKI_VERSION}/LICENSE", "/loki/result/extracted/LICENSE"]
+ADD ["https://raw.githubusercontent.com/grafana/loki/v${LOKI_VERSION}/LICENSING.md", "/loki/result/extracted/LICENSING.md"]
 COPY ".\config\loki.yaml" "C:\loki\result\extracted\config\loki.yaml"
 
 ARG IMAGE_PATH

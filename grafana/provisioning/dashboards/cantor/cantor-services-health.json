@@ -1,0 +1,638 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "liveNow": false,
+  "panels": [
+    {
+      "collapsed": false,
+      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 0 },
+      "id": 15,
+      "title": "🚦 At a Glance",
+      "type": "row"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "aw_prometheus" },
+      "fieldConfig": {
+        "defaults": {
+          "max": 1,
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "red", "value": 0 },
+              { "color": "green", "value": 0.99 }
+            ]
+          },
+          "unit": "percentunit"
+        }
+      },
+      "gridPos": { "h": 4, "w": 6, "x": 0, "y": 1 },
+      "id": 2,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": ["lastNotNull"],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "13.0.1",
+      "targets": [
+        {
+          "datasource": { "type": "prometheus", "uid": "aw_prometheus" },
+          "editorMode": "code",
+          "expr": "(sum(increase(http_server_request_duration_seconds_count{deployment_environment_name=~\"${deployment_environment_name:regex}\", service_name=\"Cantor.ERP.API\", http_route=\"/healthz\", http_response_status_code=\"200\"}[15m])) or vector(0)) / sum(increase(http_server_request_duration_seconds_count{deployment_environment_name=~\"${deployment_environment_name:regex}\", service_name=\"Cantor.ERP.API\", http_route=\"/healthz\", http_response_status_code=~\".+\"}[15m]))",
+          "instant": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Cantor.ERP.API – /healthz success rate (15m)",
+      "type": "stat"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "aw_prometheus" },
+      "fieldConfig": {
+        "defaults": {
+          "max": 1,
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "red", "value": 0 },
+              { "color": "green", "value": 0.99 }
+            ]
+          },
+          "unit": "percentunit"
+        }
+      },
+      "gridPos": { "h": 4, "w": 6, "x": 6, "y": 1 },
+      "id": 14,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": ["lastNotNull"],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "13.0.1",
+      "targets": [
+        {
+          "datasource": { "type": "prometheus", "uid": "aw_prometheus" },
+          "editorMode": "code",
+          "expr": "(sum(increase(http_server_request_duration_seconds_count{deployment_environment_name=~\"${deployment_environment_name:regex}\", service_name=\"Cantor.CIM.API\", http_route=\"/healthz\", http_response_status_code=\"200\"}[15m])) or vector(0)) / sum(increase(http_server_request_duration_seconds_count{deployment_environment_name=~\"${deployment_environment_name:regex}\", service_name=\"Cantor.CIM.API\", http_route=\"/healthz\", http_response_status_code=~\".+\"}[15m]))",
+          "instant": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Cantor.CIM.API – /healthz success rate (15m)",
+      "type": "stat"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "aw_prometheus" },
+      "fieldConfig": {
+        "defaults": {
+          "max": 100,
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "green", "value": 0 },
+              { "color": "orange", "value": 1 },
+              { "color": "red", "value": 5 }
+            ]
+          },
+          "unit": "percent"
+        }
+      },
+      "gridPos": { "h": 4, "w": 4, "x": 12, "y": 1 },
+      "id": 3,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": ["lastNotNull"],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "13.0.1",
+      "targets": [
+        {
+          "datasource": { "type": "prometheus", "uid": "aw_prometheus" },
+          "expr": "100 * (sum(increase(http_server_request_duration_seconds_count{deployment_environment_name=~\"${deployment_environment_name:regex}\", service_name=~\"(?i)Ca.*\", http_response_status_code=~\"5..\"}[15m])) or vector(0)) / sum(increase(http_server_request_duration_seconds_count{deployment_environment_name=~\"${deployment_environment_name:regex}\", service_name=~\"(?i)Ca.*\"}[15m]))",
+          "instant": true,
+          "refId": "A"
+        }
+      ],
+      "title": "HTTP Error Rate (5xx, 15m)",
+      "type": "stat"
+    },
+    {
+      "datasource": { "type": "loki", "uid": "aw_loki" },
+      "fieldConfig": {
+        "defaults": {
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "green", "value": 0 },
+              { "color": "orange", "value": 1 },
+              { "color": "red", "value": 10 }
+            ]
+          },
+          "unit": "none"
+        }
+      },
+      "gridPos": { "h": 4, "w": 4, "x": 16, "y": 1 },
+      "id": 5,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": ["lastNotNull"],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "13.0.1",
+      "targets": [
+        {
+          "datasource": { "type": "loki", "uid": "aw_loki" },
+          "direction": "backward",
+          "editorMode": "code",
+          "expr": "sum(count_over_time({deployment_environment_name=~\"${deployment_environment_name:regex}\", service_name=~\"(?i)Ca.*\"} | detected_level =~ `(?i)err.*` [15m])) or vector(0)",
+          "queryType": "instant",
+          "refId": "A"
+        }
+      ],
+      "title": "Error Log Rate (15m)",
+      "type": "stat"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "aw_prometheus" },
+      "fieldConfig": {
+        "defaults": {
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "green", "value": 0 },
+              { "color": "orange", "value": 1 },
+              { "color": "red", "value": 50 }
+            ]
+          },
+          "unit": "none"
+        }
+      },
+      "gridPos": { "h": 4, "w": 4, "x": 20, "y": 1 },
+      "id": 4,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": ["lastNotNull"],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "13.0.1",
+      "targets": [
+        {
+          "datasource": { "type": "prometheus", "uid": "aw_prometheus" },
+          "editorMode": "code",
+          "expr": "sum(increase(dotnet_exceptions_total{deployment_environment_name=~\"${deployment_environment_name:regex}\", service_name=~\"(?i)Ca.*\", error_type!~\"OperationCanceledException|IOException\"}[15m])) or vector(0)",
+          "instant": true,
+          "refId": "A"
+        }
+      ],
+      "title": ".net Exceptions (15m)",
+      "type": "stat"
+    },
+    {
+      "collapsed": false,
+      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 5 },
+      "id": 16,
+      "title": "🔍 API Requests & Errors",
+      "type": "row"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "aw_prometheus" },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "palette-classic" },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": { "legend": false, "tooltip": false, "viz": false },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": { "type": "linear" },
+            "showPoints": "auto",
+            "showValues": false,
+            "spanNulls": false,
+            "stacking": { "group": "A", "mode": "none" },
+            "thresholdsStyle": { "mode": "off" }
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "green", "value": 0 },
+              { "color": "red", "value": 80 }
+            ]
+          },
+          "unit": "reqps"
+        }
+      },
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 6 },
+      "id": 7,
+      "options": {
+        "annotations": { "clustering": -1, "multiLane": false },
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": { "hideZeros": false, "mode": "multi", "sort": "none" }
+      },
+      "pluginVersion": "13.0.1",
+      "targets": [
+        {
+          "datasource": { "type": "prometheus", "uid": "aw_prometheus" },
+          "expr": "sum by (service_name) (rate(http_server_request_duration_seconds_count{deployment_environment_name=~\"${deployment_environment_name:regex}\", service_name=~\"(?i)Ca.*\"}[5m]))",
+          "legendFormat": "{{service_name}}",
+          "refId": "A"
+        }
+      ],
+      "title": "Request Rate by Service",
+      "type": "timeseries"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "aw_prometheus" },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "palette-classic" },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": { "legend": false, "tooltip": false, "viz": false },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": { "type": "linear" },
+            "showPoints": "auto",
+            "showValues": false,
+            "spanNulls": false,
+            "stacking": { "group": "A", "mode": "none" },
+            "thresholdsStyle": { "mode": "off" }
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "green", "value": 0 },
+              { "color": "red", "value": 80 }
+            ]
+          },
+          "unit": "percent"
+        }
+      },
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 6 },
+      "id": 8,
+      "options": {
+        "annotations": { "clustering": -1, "multiLane": false },
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": { "hideZeros": false, "mode": "multi", "sort": "none" }
+      },
+      "pluginVersion": "13.0.1",
+      "targets": [
+        {
+          "datasource": { "type": "prometheus", "uid": "aw_prometheus" },
+          "expr": "100 * (sum by (service_name) (rate(http_server_request_duration_seconds_count{deployment_environment_name=~\"${deployment_environment_name:regex}\", service_name=~\"(?i)Ca.*\", http_response_status_code=~\"5..\"}[5m])) or (sum by (service_name) (rate(http_server_request_duration_seconds_count{deployment_environment_name=~\"${deployment_environment_name:regex}\", service_name=~\"(?i)Ca.*\"}[5m])) * 0)) / sum by (service_name) (rate(http_server_request_duration_seconds_count{deployment_environment_name=~\"${deployment_environment_name:regex}\", service_name=~\"(?i)Ca.*\"}[5m]))",
+          "legendFormat": "{{service_name}} 5xx",
+          "refId": "A"
+        },
+        {
+          "datasource": { "type": "prometheus", "uid": "aw_prometheus" },
+          "expr": "100 * (sum by (service_name) (rate(http_server_request_duration_seconds_count{deployment_environment_name=~\"${deployment_environment_name:regex}\", service_name=~\"(?i)Ca.*\", http_response_status_code=~\"4..\"}[5m])) or (sum by (service_name) (rate(http_server_request_duration_seconds_count{deployment_environment_name=~\"${deployment_environment_name:regex}\", service_name=~\"(?i)Ca.*\"}[5m])) * 0)) / sum by (service_name) (rate(http_server_request_duration_seconds_count{deployment_environment_name=~\"${deployment_environment_name:regex}\", service_name=~\"(?i)Ca.*\"}[5m]))",
+          "legendFormat": "{{service_name}} 4xx",
+          "refId": "B"
+        }
+      ],
+      "title": "HTTP Error Rate % by Service (4xx / 5xx)",
+      "type": "timeseries"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "aw_prometheus" },
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "align": "auto",
+            "cellOptions": { "type": "auto" },
+            "footer": { "reducers": [] },
+            "inspect": false
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "green", "value": 0 },
+              { "color": "red", "value": 80 }
+            ]
+          }
+        }
+      },
+      "gridPos": { "h": 8, "w": 24, "x": 0, "y": 14 },
+      "id": 9,
+      "options": { "cellHeight": "sm", "showHeader": true },
+      "pluginVersion": "13.0.1",
+      "targets": [
+        {
+          "datasource": { "type": "prometheus", "uid": "aw_prometheus" },
+          "expr": "topk(10, sum by (service_name, http_route, http_response_status_code) (increase(http_server_request_duration_seconds_count{deployment_environment_name=~\"${deployment_environment_name:regex}\", service_name=~\"(?i)Ca.*\", http_response_status_code=~\"4..|5..\"}[1h])))",
+          "format": "table",
+          "instant": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Top Failing Routes (last 1h)",
+      "transformations": [
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": { "Time": true },
+            "renameByName": { "Value": "Count (1h)" }
+          }
+        }
+      ],
+      "type": "table"
+    },
+    {
+      "collapsed": false,
+      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 22 },
+      "id": 17,
+      "title": "🪵 Exceptions & Error Logs",
+      "type": "row"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "aw_prometheus" },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "palette-classic" },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": { "legend": false, "tooltip": false, "viz": false },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": { "type": "linear" },
+            "showPoints": "auto",
+            "showValues": false,
+            "spanNulls": false,
+            "stacking": { "group": "A", "mode": "none" },
+            "thresholdsStyle": { "mode": "off" }
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "green", "value": 0 },
+              { "color": "red", "value": 80 }
+            ]
+          },
+          "unit": "ops"
+        }
+      },
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 23 },
+      "id": 11,
+      "options": {
+        "annotations": { "clustering": -1, "multiLane": false },
+        "legend": {
+          "calcs": [],
+          "displayMode": "table",
+          "placement": "right",
+          "showLegend": true
+        },
+        "tooltip": { "hideZeros": false, "mode": "multi", "sort": "none" }
+      },
+      "pluginVersion": "13.0.1",
+      "targets": [
+        {
+          "datasource": { "type": "prometheus", "uid": "aw_prometheus" },
+          "expr": "sum by (service_name, error_type) (rate(dotnet_exceptions_total{deployment_environment_name=~\"${deployment_environment_name:regex}\", service_name=~\"(?i)Ca.*\", error_type!~\"OperationCanceledException|IOException\"}[5m]))",
+          "legendFormat": "{{service_name}} - {{error_type}}",
+          "refId": "A"
+        }
+      ],
+      "title": "Exceptions by Type",
+      "type": "timeseries"
+    },
+    {
+      "datasource": { "type": "loki", "uid": "aw_loki" },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "palette-classic" },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": { "legend": false, "tooltip": false, "viz": false },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": { "type": "linear" },
+            "showPoints": "auto",
+            "showValues": false,
+            "spanNulls": false,
+            "stacking": { "group": "A", "mode": "none" },
+            "thresholdsStyle": { "mode": "off" }
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "green", "value": 0 },
+              { "color": "red", "value": 80 }
+            ]
+          },
+          "unit": "short"
+        }
+      },
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 23 },
+      "id": 12,
+      "options": {
+        "annotations": { "clustering": -1, "multiLane": false },
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": { "hideZeros": false, "mode": "multi", "sort": "none" }
+      },
+      "pluginVersion": "13.0.1",
+      "targets": [
+        {
+          "datasource": { "type": "loki", "uid": "aw_loki" },
+          "expr": "sum by (service_name) (count_over_time({deployment_environment_name=~\"${deployment_environment_name:regex}\", service_name=~\"(?i)Ca.*\"} | detected_level =~ `(?i)err.*` [5m]))",
+          "legendFormat": "{{service_name}}",
+          "refId": "A"
+        }
+      ],
+      "title": "Error Log Rate by Service",
+      "type": "timeseries"
+    },
+    {
+      "datasource": { "type": "loki", "uid": "aw_loki" },
+      "gridPos": { "h": 10, "w": 24, "x": 0, "y": 31 },
+      "id": 13,
+      "options": {
+        "dedupStrategy": "none",
+        "enableInfiniteScrolling": false,
+        "enableLogDetails": true,
+        "prettifyLogMessage": true,
+        "showControls": false,
+        "showFieldSelector": false,
+        "showLabels": false,
+        "showLevel": true,
+        "showTime": true,
+        "sortOrder": "Descending",
+        "timestampResolution": "ms",
+        "unwrappedColumns": false,
+        "wrapLogMessage": true
+      },
+      "pluginVersion": "13.0.1",
+      "targets": [
+        {
+          "datasource": { "type": "loki", "uid": "aw_loki" },
+          "expr": "{deployment_environment_name=~\"${deployment_environment_name:regex}\", service_name=~\"(?i)Ca.*\"} | detected_level =~ `(?i)err.*`",
+          "queryType": "range",
+          "refId": "A"
+        }
+      ],
+      "title": "Recent Error Logs",
+      "type": "logs"
+    }
+  ],
+  "preload": false,
+  "refresh": "1m",
+  "schemaVersion": 42,
+  "tags": ["cantor", "services-health"],
+  "templating": {
+    "list": [
+      {
+        "allowCustomValue": true,
+        "current": { "text": "", "value": "" },
+        "datasource": { "type": "prometheus", "uid": "aw_prometheus" },
+        "hide": 0,
+        "includeAll": false,
+        "label": "Customer / Environment",
+        "multi": false,
+        "name": "deployment_environment_name",
+        "options": [],
+        "query": "label_values(http_server_request_duration_seconds_count, deployment_environment_name)",
+        "refresh": 1,
+        "regex": "",
+        "regexApplyTo": "value",
+        "skipUrlSync": false,
+        "sort": 1,
+        "type": "query"
+      }
+    ]
+  },
+  "time": { "from": "now-6h", "to": "now" },
+  "timepicker": {
+    "refresh_intervals": [
+      "5s", "10s", "30s", "1m", "5m", "15m", "30m", "1h", "2h", "1d"
+    ]
+  },
+  "timezone": "browser",
+  "title": "A+W Cantor Services Health",
+  "uid": "d96b9af0-e24f-4363-9594-ee76d23caf82"
+}

@@ -14,7 +14,7 @@ ARG DOWNLOADER_IMAGE_VERSION="8.0-nanoserver-ltsc2022"
 FROM $DOWNLOADER_IMAGE_PATH:$DOWNLOADER_IMAGE_VERSION as downloader
 
 # Used to configure the version of the binary that is downloaded from Github
-ARG COLLECTOR_VERSION="0.153.0"
+ARG COLLECTOR_VERSION="0.164.0"
 
 SHELL ["pwsh", "-ExecutionPolicy","RemoteSigned", "-Command", "$ErrorActionPreference = 'Stop'; $ProgressPreference = 'SilentlyContinue'; $InformationPreference = 'Continue';"]
 
@@ -25,6 +25,9 @@ ADD ["https://github.com/open-telemetry/opentelemetry-collector-releases/release
 RUN `
     tar -vxf "C:\collector\download\collector.tar.gz"; `
     Copy-Item -LiteralPath 'C:\collector\download\otelcol-contrib.exe' -Destination 'C:\collector\result\otelcol-contrib.exe';
+# The release archive contains only the executable, so the license texts come from the release tag.
+ADD ["https://raw.githubusercontent.com/open-telemetry/opentelemetry-collector-contrib/v${COLLECTOR_VERSION}/LICENSE", "/collector/result/LICENSE"]
+ADD ["https://raw.githubusercontent.com/open-telemetry/opentelemetry-collector-contrib/v${COLLECTOR_VERSION}/NOTICE", "/collector/result/NOTICE"]
 WORKDIR /collector/result/config
 COPY ".\config\otel-colector.config.yaml" "C:\collector\result\config\otel-colector.config.yaml"
 

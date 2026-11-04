@@ -1,0 +1,1081 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": { "type": "grafana", "uid": "-- Grafana --" },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 1,
+  "liveNow": false,
+  "panels": [
+    {
+      "collapsed": false,
+      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 0 },
+      "id": 25,
+      "title": "Overview",
+      "type": "row"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "aw_prometheus" },
+      "description": "Count of Ca*.exe process instances currently reporting aw.process.up = 1.",
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "thresholds" },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "red", "value": 0 },
+              { "color": "green", "value": 1 }
+            ]
+          }
+        }
+      },
+      "gridPos": { "h": 4, "w": 5, "x": 0, "y": 1 },
+      "id": 1,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": ["lastNotNull"],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "13.0.1",
+      "targets": [
+        {
+          "datasource": { "type": "prometheus", "uid": "aw_prometheus" },
+          "expr": "count(aw_process_up_ratio{service_name=~\"(?i)^ca.*\\\\.exe$\", deployment_environment_name=~\"${deployment:regex}\"} == 1)",
+          "instant": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Running Instances",
+      "type": "stat"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "aw_prometheus" },
+      "description": "Count of distinct Ca*.exe service names currently reporting.",
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "thresholds" },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [{ "color": "blue", "value": 0 }]
+          }
+        }
+      },
+      "gridPos": { "h": 4, "w": 5, "x": 5, "y": 1 },
+      "id": 2,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": ["lastNotNull"],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "13.0.1",
+      "targets": [
+        {
+          "datasource": { "type": "prometheus", "uid": "aw_prometheus" },
+          "expr": "count(count by (service_name) (aw_process_up_ratio{service_name=~\"(?i)^ca.*\\\\.exe$\", deployment_environment_name=~\"${deployment:regex}\"}))",
+          "instant": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Distinct Applications",
+      "type": "stat"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "aw_prometheus" },
+      "description": "Count of distinct hosts running at least one Ca*.exe process.",
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "thresholds" },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [{ "color": "blue", "value": 0 }]
+          }
+        }
+      },
+      "gridPos": { "h": 4, "w": 5, "x": 10, "y": 1 },
+      "id": 3,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": ["lastNotNull"],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "13.0.1",
+      "targets": [
+        {
+          "datasource": { "type": "prometheus", "uid": "aw_prometheus" },
+          "expr": "count(count by (host_name) (aw_process_up_ratio{service_name=~\"(?i)^ca.*\\\\.exe$\", deployment_environment_name=~\"${deployment:regex}\"}))",
+          "instant": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Hosts Reporting",
+      "type": "stat"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "aw_prometheus" },
+      "description": "Distinct (service, host, PID) combinations observed at any point in the selected time range. If this exceeds 'Running Instances', a process exited/restarted (new PID) during the window — a proxy for crash/restart churn.",
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "thresholds" },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "green", "value": 0 },
+              { "color": "orange", "value": 1 }
+            ]
+          }
+        }
+      },
+      "gridPos": { "h": 4, "w": 5, "x": 15, "y": 1 },
+      "id": 4,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": ["lastNotNull"],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "13.0.1",
+      "targets": [
+        {
+          "datasource": { "type": "prometheus", "uid": "aw_prometheus" },
+          "expr": "count(count by (service_name, host_name, process_pid) (max_over_time(aw_process_up_ratio{service_name=~\"(?i)^ca.*\\\\.exe$\", deployment_environment_name=~\"${deployment:regex}\"}[$__range])))",
+          "instant": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Process Instances Seen (range)",
+      "type": "stat"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "aw_prometheus" },
+      "description": "Process Instances Seen (range) minus Running Instances — the number of PIDs observed during the selected time range that are no longer running now. This counts ANY process termination, not just crashes/restarts: closing a running Ca*.exe normally also increases this by one, since 'seen' still includes its PID while 'running' no longer does. It cannot distinguish a crash/restart from a deliberate shutdown by itself - cross-check with the Logs panel below (or a process-start/restart event metric, if one becomes available) before treating a non-zero value as instability. Conversely, Windows reusing the same PID across two separate launches of the same service/host combination can under-count distinct starts.",
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "thresholds" },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "green", "value": 0 },
+              { "color": "orange", "value": 1 },
+              { "color": "red", "value": 3 }
+            ]
+          }
+        }
+      },
+      "gridPos": { "h": 4, "w": 4, "x": 20, "y": 1 },
+      "id": 18,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": ["lastNotNull"],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "13.0.1",
+      "targets": [
+        {
+          "datasource": { "type": "prometheus", "uid": "aw_prometheus" },
+          "expr": "count(count by (service_name, host_name, process_pid) (max_over_time(aw_process_up_ratio{service_name=~\"(?i)^ca.*\\\\.exe$\", deployment_environment_name=~\"${deployment:regex}\"}[$__range]))) - count(aw_process_up_ratio{service_name=~\"(?i)^ca.*\\\\.exe$\", deployment_environment_name=~\"${deployment:regex}\"} == 1)",
+          "instant": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Terminated Instances (range)",
+      "type": "stat"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "aw_prometheus" },
+      "description": "One row per running instance: liveness, CPU, memory, GDI/User object counts. service_name matches ^ca.*\\.exe$ (case-insensitive).",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "align": "auto",
+            "cellOptions": { "type": "auto" },
+            "footer": { "reducers": [] },
+            "inspect": false
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "green", "value": 0 },
+              { "color": "red", "value": 80 }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": { "id": "byName", "options": "Up" },
+            "properties": [
+              {
+                "id": "custom.cellOptions",
+                "value": { "mode": "basic", "type": "color-background" }
+              },
+              {
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    { "color": "red", "value": 0 },
+                    { "color": "green", "value": 1 }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "matcher": { "id": "byName", "options": "GDI Objects" },
+            "properties": [
+              {
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    { "color": "green", "value": 0 },
+                    { "color": "orange", "value": 7000 },
+                    { "color": "red", "value": 9000 }
+                  ]
+                }
+              },
+              {
+                "id": "custom.cellOptions",
+                "value": { "mode": "basic", "type": "color-background" }
+              }
+            ]
+          },
+          {
+            "matcher": { "id": "byName", "options": "User Objects" },
+            "properties": [
+              {
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    { "color": "green", "value": 0 },
+                    { "color": "orange", "value": 7000 },
+                    { "color": "red", "value": 9000 }
+                  ]
+                }
+              },
+              {
+                "id": "custom.cellOptions",
+                "value": { "mode": "basic", "type": "color-background" }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": { "h": 9, "w": 24, "x": 0, "y": 5 },
+      "id": 5,
+      "options": { "cellHeight": "sm", "showHeader": true },
+      "pluginVersion": "13.0.1",
+      "targets": [
+        {
+          "datasource": { "type": "prometheus", "uid": "aw_prometheus" },
+          "expr": "aw_process_up_ratio{service_name=~\"(?i)^ca.*\\\\.exe$\", deployment_environment_name=~\"${deployment:regex}\"}",
+          "format": "table",
+          "instant": true,
+          "refId": "A"
+        },
+        {
+          "datasource": { "type": "prometheus", "uid": "aw_prometheus" },
+          "expr": "aw_process_cpu_usage_percent{service_name=~\"(?i)^ca.*\\\\.exe$\", deployment_environment_name=~\"${deployment:regex}\"}",
+          "format": "table",
+          "instant": true,
+          "refId": "B"
+        },
+        {
+          "datasource": { "type": "prometheus", "uid": "aw_prometheus" },
+          "expr": "aw_process_memory_working_set_mb{service_name=~\"(?i)^ca.*\\\\.exe$\", deployment_environment_name=~\"${deployment:regex}\"}",
+          "format": "table",
+          "instant": true,
+          "refId": "C"
+        },
+        {
+          "datasource": { "type": "prometheus", "uid": "aw_prometheus" },
+          "expr": "aw_process_objects_gdi_count{service_name=~\"(?i)^ca.*\\\\.exe$\", deployment_environment_name=~\"${deployment:regex}\"}",
+          "format": "table",
+          "instant": true,
+          "refId": "D"
+        },
+        {
+          "datasource": { "type": "prometheus", "uid": "aw_prometheus" },
+          "expr": "aw_process_objects_user_count{service_name=~\"(?i)^ca.*\\\\.exe$\", deployment_environment_name=~\"${deployment:regex}\"}",
+          "format": "table",
+          "instant": true,
+          "refId": "E"
+        }
+      ],
+      "title": "Process Inventory — Ca*.exe",
+      "transformations": [
+        {
+          "id": "filterFieldsByName",
+          "options": { "exclude": { "names": ["__name__"] } }
+        },
+        { "id": "merge", "options": {} },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": { "Time": true, "job": true },
+            "indexByName": {},
+            "renameByName": {
+              "Value #A": "Up",
+              "Value #B": "CPU %",
+              "Value #C": "Working Set (MB)",
+              "Value #D": "GDI Objects",
+              "Value #E": "User Objects",
+              "deployment_environment_name": "Deployment",
+              "host_name": "Host",
+              "process_executable_name": "Executable",
+              "process_pid": "PID",
+              "service_name": "Service"
+            }
+          }
+        }
+      ],
+      "type": "table"
+    },
+    {
+      "collapsed": false,
+      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 14 },
+      "id": 26,
+      "title": "Performance (CPU / Memory)",
+      "type": "row"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "aw_prometheus" },
+      "description": "aw.process.cpu.usage per instance, shown as max over each displayed interval ($__interval, floored at 1m). The raw gauge alternates sharply between samples (e.g. 0% / 1.6% every ~15s), so a plain instant value aliases badly at wider time ranges — max_over_time avoids that and highlights real spikes.",
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "palette-classic" },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "gradientMode": "none",
+            "hideFrom": { "legend": false, "tooltip": false, "viz": false },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": { "type": "linear" },
+            "showPoints": "auto",
+            "showValues": false,
+            "spanNulls": false,
+            "stacking": { "group": "A", "mode": "none" },
+            "thresholdsStyle": { "mode": "off" }
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "green", "value": 0 },
+              { "color": "red", "value": 80 }
+            ]
+          },
+          "unit": "percent"
+        }
+      },
+      "gridPos": { "h": 8, "w": 24, "x": 0, "y": 15 },
+      "id": 6,
+      "options": {
+        "annotations": { "clustering": -1, "multiLane": false },
+        "legend": {
+          "calcs": ["mean", "max", "lastNotNull"],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": { "hideZeros": false, "mode": "multi", "sort": "none" }
+      },
+      "pluginVersion": "13.0.1",
+      "targets": [
+        {
+          "datasource": { "type": "prometheus", "uid": "aw_prometheus" },
+          "expr": "max_over_time(aw_process_cpu_usage_percent{service_name=~\"(?i)^ca.*\\\\.exe$\", deployment_environment_name=~\"${deployment:regex}\"}[$__interval])",
+          "interval": "1m",
+          "legendFormat": "{{process_executable_name}} (pid {{process_pid}}) @ {{host_name}}",
+          "refId": "A"
+        }
+      ],
+      "title": "CPU Usage — Ca*.exe",
+      "type": "timeseries"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "aw_prometheus" },
+      "description": "aw.process.memory.working_set and aw.process.memory.private_usage. Sustained growth without a corresponding workload increase indicates a memory leak.",
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "palette-classic" },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "gradientMode": "none",
+            "hideFrom": { "legend": false, "tooltip": false, "viz": false },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": { "type": "linear" },
+            "showPoints": "auto",
+            "showValues": false,
+            "spanNulls": false,
+            "stacking": { "group": "A", "mode": "none" },
+            "thresholdsStyle": { "mode": "off" }
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "green", "value": 0 },
+              { "color": "red", "value": 80 }
+            ]
+          },
+          "unit": "decmbytes"
+        }
+      },
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 23 },
+      "id": 7,
+      "options": {
+        "annotations": { "clustering": -1, "multiLane": false },
+        "legend": {
+          "calcs": ["mean", "max", "lastNotNull"],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true,
+          "sortBy": "Max",
+          "sortDesc": true
+        },
+        "tooltip": { "hideZeros": false, "mode": "multi", "sort": "none" }
+      },
+      "pluginVersion": "13.0.1",
+      "targets": [
+        {
+          "datasource": { "type": "prometheus", "uid": "aw_prometheus" },
+          "expr": "aw_process_memory_working_set_mb{service_name=~\"(?i)^ca.*\\\\.exe$\", deployment_environment_name=~\"${deployment:regex}\"}",
+          "legendFormat": "{{process_executable_name}} (pid {{process_pid}}) — working set",
+          "refId": "A"
+        },
+        {
+          "datasource": { "type": "prometheus", "uid": "aw_prometheus" },
+          "expr": "aw_process_memory_private_usage_mb{service_name=~\"(?i)^ca.*\\\\.exe$\", deployment_environment_name=~\"${deployment:regex}\"}",
+          "legendFormat": "{{process_executable_name}} (pid {{process_pid}}) — private usage",
+          "refId": "B"
+        }
+      ],
+      "title": "Memory — Working Set / Private Usage (MB)",
+      "type": "timeseries"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "aw_prometheus" },
+      "description": "aw.process.memory.peak_working_set, pagefile_usage, peak_pagefile_usage.",
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "palette-classic" },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "gradientMode": "none",
+            "hideFrom": { "legend": false, "tooltip": false, "viz": false },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": { "type": "linear" },
+            "showPoints": "auto",
+            "showValues": false,
+            "spanNulls": false,
+            "stacking": { "group": "A", "mode": "none" },
+            "thresholdsStyle": { "mode": "off" }
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "green", "value": 0 },
+              { "color": "red", "value": 80 }
+            ]
+          },
+          "unit": "decmbytes"
+        }
+      },
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 23 },
+      "id": 8,
+      "options": {
+        "annotations": { "clustering": -1, "multiLane": false },
+        "legend": {
+          "calcs": ["mean", "max", "lastNotNull"],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true,
+          "sortBy": "Max",
+          "sortDesc": true
+        },
+        "tooltip": { "hideZeros": false, "mode": "multi", "sort": "none" }
+      },
+      "pluginVersion": "13.0.1",
+      "targets": [
+        {
+          "datasource": { "type": "prometheus", "uid": "aw_prometheus" },
+          "expr": "aw_process_memory_peak_working_set_mb{service_name=~\"(?i)^ca.*\\\\.exe$\", deployment_environment_name=~\"${deployment:regex}\"}",
+          "legendFormat": "{{process_executable_name}} (pid {{process_pid}}) — peak working set",
+          "refId": "A"
+        },
+        {
+          "datasource": { "type": "prometheus", "uid": "aw_prometheus" },
+          "expr": "aw_process_memory_pagefile_usage_mb{service_name=~\"(?i)^ca.*\\\\.exe$\", deployment_environment_name=~\"${deployment:regex}\"}",
+          "legendFormat": "{{process_executable_name}} (pid {{process_pid}}) — pagefile usage",
+          "refId": "B"
+        },
+        {
+          "datasource": { "type": "prometheus", "uid": "aw_prometheus" },
+          "expr": "aw_process_memory_peak_pagefile_usage_mb{service_name=~\"(?i)^ca.*\\\\.exe$\", deployment_environment_name=~\"${deployment:regex}\"}",
+          "legendFormat": "{{process_executable_name}} (pid {{process_pid}}) — peak pagefile",
+          "refId": "C"
+        }
+      ],
+      "title": "Memory — Peak Working Set & Pagefile (MB)",
+      "type": "timeseries"
+    },
+    {
+      "collapsed": false,
+      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 31 },
+      "id": 27,
+      "title": "Handles (GDI / User Objects)",
+      "type": "row"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "aw_prometheus" },
+      "description": "aw.process.objects.gdi and gdi_peak. Windows' default per-process GDI handle quota is 10,000 (GDIProcessHandleQuota) — approaching it causes rendering failures and crashes. Reference lines at 7,000 (warning) and 9,000 (critical).",
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "palette-classic" },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "gradientMode": "none",
+            "hideFrom": { "legend": false, "tooltip": false, "viz": false },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": { "type": "linear" },
+            "showPoints": "auto",
+            "showValues": false,
+            "spanNulls": false,
+            "stacking": { "group": "A", "mode": "none" },
+            "thresholdsStyle": { "mode": "line" }
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "green", "value": 0 },
+              { "color": "orange", "value": 7000 },
+              { "color": "red", "value": 9000 }
+            ]
+          },
+          "unit": "short"
+        }
+      },
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 32 },
+      "id": 9,
+      "options": {
+        "annotations": { "clustering": -1, "multiLane": false },
+        "legend": {
+          "calcs": ["max", "lastNotNull"],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": { "hideZeros": false, "mode": "multi", "sort": "none" }
+      },
+      "pluginVersion": "13.0.1",
+      "targets": [
+        {
+          "datasource": { "type": "prometheus", "uid": "aw_prometheus" },
+          "expr": "aw_process_objects_gdi_count{service_name=~\"(?i)^ca.*\\\\.exe$\", deployment_environment_name=~\"${deployment:regex}\"}",
+          "legendFormat": "{{process_executable_name}} (pid {{process_pid}}) — current",
+          "refId": "A"
+        },
+        {
+          "datasource": { "type": "prometheus", "uid": "aw_prometheus" },
+          "expr": "aw_process_objects_gdi_peak_count{service_name=~\"(?i)^ca.*\\\\.exe$\", deployment_environment_name=~\"${deployment:regex}\"}",
+          "legendFormat": "{{process_executable_name}} (pid {{process_pid}}) — peak",
+          "refId": "B"
+        }
+      ],
+      "title": "GDI Objects",
+      "type": "timeseries"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "aw_prometheus" },
+      "description": "aw.process.objects.user and user_peak. Windows' default per-process USER handle quota is 10,000 (USERProcessHandleQuota) — approaching it causes UI hangs and window-creation failures. Reference lines at 7,000 (warning) and 9,000 (critical).",
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "palette-classic" },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "gradientMode": "none",
+            "hideFrom": { "legend": false, "tooltip": false, "viz": false },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": { "type": "linear" },
+            "showPoints": "auto",
+            "showValues": false,
+            "spanNulls": false,
+            "stacking": { "group": "A", "mode": "none" },
+            "thresholdsStyle": { "mode": "line" }
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "green", "value": 0 },
+              { "color": "orange", "value": 7000 },
+              { "color": "red", "value": 9000 }
+            ]
+          },
+          "unit": "short"
+        }
+      },
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 32 },
+      "id": 10,
+      "options": {
+        "annotations": { "clustering": -1, "multiLane": false },
+        "legend": {
+          "calcs": ["max", "lastNotNull"],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": { "hideZeros": false, "mode": "multi", "sort": "none" }
+      },
+      "pluginVersion": "13.0.1",
+      "targets": [
+        {
+          "datasource": { "type": "prometheus", "uid": "aw_prometheus" },
+          "expr": "aw_process_objects_user_count{service_name=~\"(?i)^ca.*\\\\.exe$\", deployment_environment_name=~\"${deployment:regex}\"}",
+          "legendFormat": "{{process_executable_name}} (pid {{process_pid}}) — current",
+          "refId": "A"
+        },
+        {
+          "datasource": { "type": "prometheus", "uid": "aw_prometheus" },
+          "expr": "aw_process_objects_user_peak_count{service_name=~\"(?i)^ca.*\\\\.exe$\", deployment_environment_name=~\"${deployment:regex}\"}",
+          "legendFormat": "{{process_executable_name}} (pid {{process_pid}}) — peak",
+          "refId": "B"
+        }
+      ],
+      "title": "User Objects",
+      "type": "timeseries"
+    },
+    {
+      "collapsed": false,
+      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 40 },
+      "id": 28,
+      "title": "Logs (Error / Warning)",
+      "type": "row"
+    },
+    {
+      "datasource": { "type": "loki", "uid": "aw_loki" },
+      "description": "Log lines from any A+W Cantor desktop service (service_name matches ^ca.*\\.exe$, case-insensitive) at ERROR or WARNING level.",
+      "gridPos": { "h": 12, "w": 24, "x": 0, "y": 41 },
+      "id": 11,
+      "options": {
+        "dedupStrategy": "none",
+        "enableInfiniteScrolling": false,
+        "enableLogDetails": true,
+        "prettifyLogMessage": true,
+        "showControls": false,
+        "showFieldSelector": false,
+        "showLabels": true,
+        "showLevel": true,
+        "showTime": true,
+        "sortOrder": "Descending",
+        "timestampResolution": "ms",
+        "unwrappedColumns": false,
+        "wrapLogMessage": true
+      },
+      "pluginVersion": "13.0.1",
+      "targets": [
+        {
+          "datasource": { "type": "loki", "uid": "aw_loki" },
+          "direction": "backward",
+          "editorMode": "code",
+          "expr": "{service_name=~\"(?i)^ca.*\\\\.exe$\", deployment_environment_name=~\"${deployment:regex}\"} |= `` | detected_level =~ `(?i)^(err.*|warn.*)`",
+          "queryType": "range",
+          "refId": "A"
+        }
+      ],
+      "title": "Logs (Error / Warning) — Ca*.exe",
+      "type": "logs"
+    },
+    {
+      "collapsed": false,
+      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 53 },
+      "id": 29,
+      "title": "Traces (Top 20 by Duration)",
+      "type": "row"
+    },
+    {
+      "datasource": { "type": "tempo", "uid": "aw_tempo" },
+      "description": "Number of spans (not traces) matching the Top 20 Spans query's duration filter in the selected range, via tableType: spans so each matching span is its own row. If this approaches or reaches the query's limit (1000), the top-20 table may be silently truncated — raise the duration threshold or limit.",
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "thresholds" },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "green", "value": 0 },
+              { "color": "orange", "value": 700 },
+              { "color": "red", "value": 950 }
+            ]
+          }
+        }
+      },
+      "gridPos": { "h": 3, "w": 6, "x": 0, "y": 54 },
+      "id": 24,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": ["lastNotNull"],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "13.0.1",
+      "targets": [
+        {
+          "datasource": { "type": "tempo", "uid": "aw_tempo" },
+          "limit": 1000,
+          "metricsQueryType": "range",
+          "query": "{resource.service.name=~\"(?i)^ca.*\\\\.exe$\" && resource.deployment.environment.name=~\"${deployment:regex}\" && rootName!~\"Message.*\" && duration > 1s}",
+          "queryType": "traceql",
+          "refId": "A",
+          "serviceMapUseNativeHistograms": false,
+          "tableType": "spans"
+        }
+      ],
+      "title": "Span Count (duration > 1s)",
+      "transformations": [
+        { "id": "reduce", "options": { "reducers": ["count"] } }
+      ],
+      "type": "stat"
+    },
+    {
+      "datasource": { "type": "tempo", "uid": "aw_tempo" },
+      "description": "Spans (not traces) from any A+W Cantor desktop service (resource.service.name matches ^ca.*\\.exe$, case-insensitive), top 20 by span duration, via tableType: spans so each matching span is its own row instead of being collapsed to one row per trace. IMPORTANT: TraceQL has no ORDER BY — Tempo always returns matches in scan order (effectively most-recent-first) capped by 'limit'. This query filters server-side with 'duration > 50ms' to search the whole time range via Tempo's duration index (rather than just the most-recent matches), then sorts client-side by span duration and truncates to the top 20. If the number of matches (see 'Span Count' panel) reaches the query limit (1000), results are silently truncated again and the true top 20 may be missed — raise the duration threshold or the limit if that panel goes orange/red.",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "align": "auto",
+            "cellOptions": { "type": "auto" },
+            "footer": { "reducers": [] },
+            "inspect": false
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "green", "value": 0 },
+              { "color": "red", "value": 80 }
+            ]
+          }
+        }
+      },
+      "gridPos": { "h": 10, "w": 24, "x": 0, "y": 57 },
+      "id": 17,
+      "options": {
+        "cellHeight": "sm",
+        "showHeader": true,
+        "sortBy": [{ "desc": true, "displayName": "Duration" }]
+      },
+      "pluginVersion": "13.0.1",
+      "targets": [
+        {
+          "datasource": { "type": "tempo", "uid": "aw_tempo" },
+          "limit": 1000,
+          "metricsQueryType": "range",
+          "query": "{resource.service.name=~\"(?i)^ca.*\\\\.exe$\" && resource.deployment.environment.name=~\"${deployment:regex}\" && rootName!~\"Message.*\" && duration > 1s}",
+          "queryType": "traceql",
+          "refId": "A",
+          "serviceMapUseNativeHistograms": false,
+          "tableType": "spans"
+        }
+      ],
+      "title": "Top 20 Spans (duration > 1s) — Ca*.exe (by Span Duration desc)",
+      "transformations": [
+        {
+          "id": "sortBy",
+          "options": {
+            "fields": {},
+            "sort": [{ "desc": true, "field": "duration" }]
+          }
+        },
+        { "id": "limit", "options": { "limit": 20 } }
+      ],
+      "type": "table"
+    },
+    {
+      "datasource": { "type": "tempo", "uid": "aw_tempo" },
+      "description": "Number of Ca*.exe spans exceeding 5 seconds in the selected range.",
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "thresholds" },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "green", "value": 0 },
+              { "color": "orange", "value": 1 },
+              { "color": "red", "value": 3 }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": { "h": 3, "w": 6, "x": 6, "y": 54 },
+      "id": 30,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "reduceOptions": { "calcs": ["lastNotNull"] },
+        "textMode": "auto"
+      },
+      "targets": [
+        {
+          "datasource": { "type": "tempo", "uid": "aw_tempo" },
+          "limit": 1000,
+          "metricsQueryType": "range",
+          "query": "{resource.service.name=~\"(?i)^ca.*\\\\.exe$\" && resource.deployment.environment.name=~\"${deployment:regex}\" && rootName!~\"Message.*\" && duration > 5s}",
+          "queryType": "traceql",
+          "refId": "A",
+          "tableType": "spans"
+        }
+      ],
+      "title": "Span Count (duration > 5s)",
+      "transformations": [
+        { "id": "reduce", "options": { "reducers": ["count"] } }
+      ],
+      "type": "stat"
+    },
+    {
+      "datasource": { "type": "tempo", "uid": "aw_tempo" },
+      "description": "Number of Ca*.exe spans exceeding 30 seconds in the selected range — a single occurrence is already notable.",
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "thresholds" },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "green", "value": 0 },
+              { "color": "red", "value": 1 }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": { "h": 3, "w": 6, "x": 12, "y": 54 },
+      "id": 31,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "reduceOptions": { "calcs": ["lastNotNull"] },
+        "textMode": "auto"
+      },
+      "targets": [
+        {
+          "datasource": { "type": "tempo", "uid": "aw_tempo" },
+          "limit": 1000,
+          "metricsQueryType": "range",
+          "query": "{resource.service.name=~\"(?i)^ca.*\\\\.exe$\" && resource.deployment.environment.name=~\"${deployment:regex}\" && rootName!~\"Message.*\" && duration > 30s}",
+          "queryType": "traceql",
+          "refId": "A",
+          "tableType": "spans"
+        }
+      ],
+      "title": "Span Count (duration > 30s)",
+      "transformations": [
+        { "id": "reduce", "options": { "reducers": ["count"] } }
+      ],
+      "type": "stat"
+    },
+    {
+      "datasource": { "type": "tempo", "uid": "aw_tempo" },
+      "description": "Number of Ca*.exe spans exceeding 60 seconds in the selected range — critical, indicates a hang-level operation.",
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "thresholds" },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "green", "value": 0 },
+              { "color": "red", "value": 1 }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": { "h": 3, "w": 6, "x": 18, "y": 54 },
+      "id": 32,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "reduceOptions": { "calcs": ["lastNotNull"] },
+        "textMode": "auto"
+      },
+      "targets": [
+        {
+          "datasource": { "type": "tempo", "uid": "aw_tempo" },
+          "limit": 1000,
+          "metricsQueryType": "range",
+          "query": "{resource.service.name=~\"(?i)^ca.*\\\\.exe$\" && resource.deployment.environment.name=~\"${deployment:regex}\" && rootName!~\"Message.*\" && duration > 60s}",
+          "queryType": "traceql",
+          "refId": "A",
+          "tableType": "spans"
+        }
+      ],
+      "title": "Span Count (duration > 60s)",
+      "transformations": [
+        { "id": "reduce", "options": { "reducers": ["count"] } }
+      ],
+      "type": "stat"
+    }
+  ],
+  "preload": false,
+  "refresh": "1m",
+  "schemaVersion": 42,
+  "tags": ["cantor", "desktop-applications"],
+  "templating": {
+    "list": [
+      {
+        "allowCustomValue": true,
+        "current": { "text": ["All"], "value": ["$__all"] },
+        "datasource": { "type": "prometheus", "uid": "aw_prometheus" },
+        "hide": 0,
+        "includeAll": true,
+        "label": "Deployment",
+        "multi": true,
+        "name": "deployment",
+        "options": [],
+        "query": "label_values(aw_process_up_ratio{service_name=~\"(?i)^ca.*\\\\.exe$\"}, deployment_environment_name)",
+        "refresh": 1,
+        "regex": "",
+        "regexApplyTo": "value",
+        "skipUrlSync": false,
+        "sort": 1,
+        "type": "query"
+      }
+    ]
+  },
+  "time": { "from": "now-6h", "to": "now" },
+  "timepicker": {
+    "refresh_intervals": [
+      "5s",
+      "10s",
+      "30s",
+      "1m",
+      "5m",
+      "15m",
+      "30m",
+      "1h",
+      "2h",
+      "1d"
+    ]
+  },
+  "timezone": "browser",
+  "title": "A+W Cantor Desktop Applications",
+  "uid": "3bfc6d12-2107-4e50-925b-72f526ed85eb"
+}

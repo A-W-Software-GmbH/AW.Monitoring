@@ -7,11 +7,10 @@ services:
       tags:
         - ${DOCKER_REGISTRY-}grafana:latest
       args:
-        - IMAGE_PATH=${NANOSERVER_IMAGE_PATH}
-        - IMAGE_VERSION=${NANOSERVER_IMAGE_VERSION}
-        - DOWNLOADER_IMAGE_PATH=${DOWNLOADER_IMAGE_PATH}
-        - DOWNLOADER_IMAGE_VERSION=${DOWNLOADER_IMAGE_VERSION}
-        - GRAFANA_VERSION=13.0.1
+        - IMAGE_PATH=${SERVERCORE_IMAGE_PATH}
+        - IMAGE_VERSION=${SERVERCORE_IMAGE_VERSION}
+        - GRAFANA_VERSION=13.3.0
+        - INFINITY_DATASOURCE_VERSION=4.1.5
     deploy:
       resources:
         limits:
@@ -19,9 +18,26 @@ services:
           memory: 2g
     ports:
       - "23000:3000"
+    environment:
+      # Set GRAFANA_PROTOCOL=https and drop your cert/key into ./grafana/certs
+      # (or point GRAFANA_CERTS_DIR elsewhere) to serve Grafana over TLS.
+      - GF_SERVER_PROTOCOL=${GRAFANA_PROTOCOL:-http}
+      - GF_SERVER_CERT_FILE=C:\grafana\certs\${GRAFANA_CERT_FILENAME:-server.crt}
+      - GF_SERVER_CERT_KEY=C:\grafana\certs\${GRAFANA_CERT_KEYNAME:-server.key}
+      # conf.ini's root_url = %(protocol)s://%(domain)s:23000/ interpolates from the ini
+      # file's own (commented-out) protocol/domain values, NOT from GF_SERVER_PROTOCOL above
+      # - so with only that env var set, Grafana still advertises http://localhost:23000/
+      # internally even while actually serving HTTPS, and browsers flag the page "Not secure"
+      # due to the resulting mixed-content links. Setting GF_SERVER_DOMAIN/GF_SERVER_ROOT_URL
+      # directly bypasses the broken ini interpolation.
+      - GF_SERVER_DOMAIN=${GRAFANA_DOMAIN:-localhost}
+      - GF_SERVER_ROOT_URL=${GRAFANA_PROTOCOL:-http}://${GRAFANA_DOMAIN:-localhost}:23000/
     healthcheck:
       test:
-        ["CMD-SHELL", "curl -k -f http://localhost:3000/api/health || exit 1"]
+        [
+          "CMD-SHELL",
+          "curl -k -f %GF_SERVER_PROTOCOL%://localhost:3000/api/health || exit 1",
+        ]
       interval: 1m30s
       timeout: 30s
       retries: 5
@@ -30,12 +46,14 @@ services:
       - prometheus
       - loki
       - tempo
+    isolation: process
     restart: unless-stopped
     command:
       - "--homepath=C:\\grafana"
       - "--config=C:\\grafana\\conf\\custom.ini"
     volumes:
       - ./grafana/provisioning:C:/grafana/provisioning:ro
+      - ${GRAFANA_CERTS_DIR:-./grafana/certs}:C:/grafana/certs:ro
       - grafana-data:C:/grafana/data:rw
       - grafana-logs:C:/grafana/logs:rw
     networks:
@@ -53,7 +71,7 @@ services:
         - IMAGE_VERSION=${SERVERCORE_IMAGE_VERSION}
         - DOWNLOADER_IMAGE_PATH=${DOWNLOADER_IMAGE_PATH}
         - DOWNLOADER_IMAGE_VERSION=${DOWNLOADER_IMAGE_VERSION}
-        - PROMETHEUS_VERSION=3.12.0
+        - PROMETHEUS_VERSION=3.15.1
     deploy:
       resources:
         limits:
@@ -100,7 +118,7 @@ services:
         - IMAGE_VERSION=${NANOSERVER_IMAGE_VERSION}
         - DOWNLOADER_IMAGE_PATH=${DOWNLOADER_IMAGE_PATH}
         - DOWNLOADER_IMAGE_VERSION=${DOWNLOADER_IMAGE_VERSION}
-        - LOKI_VERSION=3.7.2
+        - LOKI_VERSION=3.7.9
     deploy:
       resources:
         limits:
@@ -123,6 +141,7 @@ services:
 
   tempo:
     image: ${DOCKER_REGISTRY-}tempo:${MONITORING_VERSION-latest}
+    isolation: process
     restart: unless-stopped
     build:
       context: ./tempo
@@ -134,7 +153,7 @@ services:
         - IMAGE_VERSION=${NANOSERVER_IMAGE_VERSION}
         - DOWNLOADER_IMAGE_PATH=${DOWNLOADER_IMAGE_PATH}
         - DOWNLOADER_IMAGE_VERSION=${DOWNLOADER_IMAGE_VERSION}
-        - TEMPO_VERSION=3.0.0
+        - TEMPO_VERSION=3.1.1
     deploy:
       resources:
         limits:
@@ -155,6 +174,7 @@ services:
 
   otel-collector:
     image: ${DOCKER_REGISTRY-}collector:${MONITORING_VERSION-latest}
+    isolation: process
     restart: unless-stopped
     build:
       context: ./otel-collector
@@ -166,7 +186,7 @@ services:
         - IMAGE_VERSION=${SERVERCORE_IMAGE_VERSION}
         - DOWNLOADER_IMAGE_PATH=${DOWNLOADER_IMAGE_PATH}
         - DOWNLOADER_IMAGE_VERSION=${DOWNLOADER_IMAGE_VERSION}
-        - COLLECTOR_VERSION=0.153.0
+        - COLLECTOR_VERSION=0.164.0
     deploy:
       resources:
         limits:
@@ -188,6 +208,7 @@ services:
     ports:
       - "34317:4317" # OTLP gRPC receiver
       - "34318:4318" # OTLP HTTP receiver
+      #- "33133:13133" # Health check endpoint
     networks:
       - monitoring
 
@@ -195,6 +216,7 @@ services:
     profiles:
       - mcp
     image: ${DOCKER_REGISTRY-}mcp-grafana:${MONITORING_VERSION-latest}
+    isolation: process
     restart: unless-stopped
     build:
       context: ./mcp-grafana
@@ -206,7 +228,7 @@ services:
         - IMAGE_VERSION=${NANOSERVER_IMAGE_VERSION}
         - DOWNLOADER_IMAGE_PATH=${DOWNLOADER_IMAGE_PATH}
         - DOWNLOADER_IMAGE_VERSION=${DOWNLOADER_IMAGE_VERSION}
-        - MCP_GRAFANA_VERSION=0.15.2
+        - MCP_GRAFANA_VERSION=2.2.0
     depends_on:
       - grafana
     deploy:
